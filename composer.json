@@ -1,0 +1,27 @@
+{
+    "name": "emizoripx/pos-invoicing-fel",
+    "description": "Paquete de facturación FEL",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alvaro Molina",
+            "email": "remberto.molina@ipxserver.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+
+    "autoload": {
+        "psr-4": {
+            "EmizorIpx\\PosInvoicingFel\\":"src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EmizorIpx\\PosInvoicingFel\\PosInvoicingFelServiceProvider"
+            ]
+        }
+    }
+}
