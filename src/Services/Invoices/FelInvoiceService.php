@@ -179,6 +179,7 @@ class FelInvoiceService extends BaseConnection {
             $response = $this->client->request('POST', "/api/v1/sucursales/$this->branch_number/facturas/$this->type_document", ["json" => $this->prepared_data, "headers" => ["Authorization" => "Bearer " . $this->access_token]]);
             $parsed_response = $this->parse_response($response);
             $this->setResponse($parsed_response);
+            
             return $parsed_response;
 
 

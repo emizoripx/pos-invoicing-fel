@@ -15,8 +15,7 @@ class DetalleCompraVentaResource extends JsonResource
     public function toArray($request)
     {
         return [
-            // "codigoProducto" => $this->resource['codigoProducto'],
-            "codigoProducto" => 'Prod-Libre',
+            "codigoProducto" => $this->resource['codigoProducto'],
             "descripcion" => $this->resource['descripcion'],
             "cantidad" => $this->resource['cantidad'],
             "precioUnitario" => $this->resource['precioUnitario'],
