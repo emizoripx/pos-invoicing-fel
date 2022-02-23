@@ -3,11 +3,14 @@
 namespace EmizorIpx\PosInvoicingFel\Repository;
 
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
+use EmizorIpx\PosInvoicingFel\Utils\EmissionTypes;
 use stdClass;
 
 class FelInvoiceRepository {
 
     protected $data = [];
+
+    protected $invoice_model;
 
     public function prepareData($order, $fel_data){
         $array_data = [
@@ -47,10 +50,33 @@ class FelInvoiceRepository {
         $this->data['detalles'] = $array_details;
     }
 
+    public function parseResponseToSave($data){
+        $array_data = [
+            'cuf' => $data['cuf'],
+            'url_sin' => $data['urlSin'],
+            'tipoEmision' => EmissionTypes::DESCRIPTION[$data['emission_type_code']] ,
+            'leyenda' => $data['leyenda'],
+            'direccion' => $data['direccion'],
+            'nitEmisor' => $data['nitEmisor'],
+            'municipio' => $data['municipio'],
+            'fechaEmision' => $data['fechaEmision'],
+            'razonSocialEmisor' => $data['razonSocialEmisor'],
+            'telefonoEmisor' => $data['telefonoEmisor']
+        ];
+
+        $this->data = $array_data;
+    }
+
     public function create(){
         \Log::debug("Data To Save >>>>>>>>>>>>>>>>>>>>>>");
         \Log::debug(json_encode($this->data));
         FelInvoice::create($this->data);
+    }
+
+    public function update( FelInvoice $model ){
+        $model->update($this->data );
+
+        return $model->refresh();
     }
 
 }
