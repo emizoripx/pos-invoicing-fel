@@ -18,9 +18,9 @@ class FelInvoiceRepository {
             'order_id' => $order->id,
             'numeroFactura' => $order->id,
             'nombreRazonSocial' => $fel_data['nombreRazonSocial'],
-            'codigoTipoDocumentoIdentidad' => 1,
+            'codigoTipoDocumentoIdentidad' => isset($fel_data['codigoTipoDocumentoIdentidad']) ? $fel_data['codigoTipoDocumentoIdentidad'] : 1 ,
             'numeroDocumento' => $fel_data['numeroDocumento'],
-            'codigoMetodoPago' => 1,
+            'codigoMetodoPago' => isset($fel_data['codigoMetodoPago']) ? $fel_data['codigoMetodoPago'] : 1,
             'complemento' => isset($fel_data['complemento']) ? $fel_data['complemento'] : null,
             'usuario' => $order->employee_id,
             'montoTotal' => $order->order_price,
@@ -36,7 +36,7 @@ class FelInvoiceRepository {
 
         foreach ($items as $item) {
             $new = new stdClass();
-            // $new->codigoProducto = $item->codigo_producto;
+            $new->codigoProducto = $item->codigo_producto;
             $new->descripcion = $item->name;
             $new->cantidad = $item->pivot->qty;
             $new->precioUnitario = $item->price;

@@ -67,7 +67,7 @@ class FelInvoiceController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Factura Enviada',
-                'order'=>$fel_invoice
+                'invoice'=>$fel_invoice
             ]);
 
         
