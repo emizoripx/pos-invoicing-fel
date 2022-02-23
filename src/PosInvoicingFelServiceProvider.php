@@ -2,6 +2,7 @@
 
 namespace EmizorIpx\PosInvoicingFel;
 
+use EmizorIpx\PosInvoicingFel\Providers\PosInvoicingFelEventServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
 class PosInvoicingFelServiceProvider extends ServiceProvider
@@ -14,6 +15,11 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        $this->loadRoutesFrom(__DIR__."/Routes/api.php");
+
+        // Event Service Provider
+        $this->app->register(PosInvoicingFelEventServiceProvider::class);
+
     }
 
     /**
@@ -23,6 +29,11 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // ROUTES
+        $this->loadRoutesFrom(__DIR__."/Routes/api.php");
+
+        // MIGRATIONS
+
+        $this->loadMigrationsFrom(__DIR__."/Database/Migrations");
     }
 }
