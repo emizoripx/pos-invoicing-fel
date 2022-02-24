@@ -39,10 +39,17 @@ class FelInvoiceRepository {
             $new->codigoProducto = $item->codigoProducto;
             $new->descripcion = $item->name;
             $new->cantidad = $item->pivot->qty;
-            $new->precioUnitario = $item->price;
-            $new->subTotal = $item->price * $item->pivot->qty;
+            $new->precioUnitario = $item->pivot->variant_price;
+            $new->subTotal = $item->pivot->variant_price * $item->pivot->qty;
             $new->montoDescuento = 0;
             $new->unidadMedida = 58;
+
+            $extras = json_decode($item->pivot->extras);
+
+            if(count($extras) > 0){
+                $data_extra = implode(' - ', $extras) ;
+                $new->descripcion .= ' - ' . $data_extra;
+            }
 
             $array_details[] = $new;
         }
@@ -61,7 +68,8 @@ class FelInvoiceRepository {
             'municipio' => $data['municipio'],
             'fechaEmision' => $data['fechaEmision'],
             'razonSocialEmisor' => $data['razonSocialEmisor'],
-            'telefonoEmisor' => $data['telefonoEmisor']
+            'telefonoEmisor' => $data['telefonoEmisor'],
+            'montoLiteral' => $data['montoLiteral'],
         ];
 
         $this->data = $array_data;
