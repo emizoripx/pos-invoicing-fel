@@ -84,7 +84,7 @@ class FelInvoiceRepository {
     public function update( FelInvoice $model ){
         $model->update($this->data );
 
-        return $model->refresh();
+        return $model;
     }
 
 }

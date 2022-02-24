@@ -22,6 +22,7 @@ class FelInvoiceController extends Controller
 
     public function emit( Request $request, $order_id ){
         try{
+            $init = microtime(true);
 
             if(!auth()->user()){
                 throw new Exception('La Sesión caducó, Por vuelva a iniciar sesión');
@@ -53,17 +54,26 @@ class FelInvoiceController extends Controller
             $invoice_service->setAccessToken($fel_token->access_token);
 
             \Log::debug("Set Data >>>>>>>>>>>>>>>>>> ");
+            $initBuild = microtime(true);
             $invoice_service->buildData($fel_invoice);
+            \Log::debug("TIME OF BUILD DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initBuild) );
 
             \Log::debug("Enviar a FEL >>>>>>>>>>>>>>>>>> ");
+            $initSendFel = microtime(true);
             $invoice_service->sendToFel();
+            \Log::debug("TIME OF SEND FEL >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initSendFel) );
 
             \Log::debug("Parse Response >>>>>>>>>>>>>>>>>> ");
+            $initParseData = microtime(true);
             $this->felinvoice_repo->parseResponseToSave($invoice_service->getResponse());
+            \Log::debug("TIME OF PARSE DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initParseData));
 
             \Log::debug("Actualizar Factura >>>>>>>>>>>>>>>>>> ");
+            $initUpdate = microtime(true);
             $fel_invoice = $this->felinvoice_repo->update($fel_invoice);
+            \Log::debug("TIME OF UPDATE DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initUpdate) );
 
+            \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
             return response()->json([
                 'status' => true,
                 'message' => 'Factura Enviada',
