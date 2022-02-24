@@ -35,5 +35,8 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
         // MIGRATIONS
 
         $this->loadMigrationsFrom(__DIR__."/Database/Migrations");
+
+        // VIEWS
+        $this->loadViewsFrom(__DIR__ . "/Resources/Views", "posinvoicingfel");
     }
 }
