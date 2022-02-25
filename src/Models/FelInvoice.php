@@ -12,7 +12,8 @@ class FelInvoice extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'detalles' => 'array'
+        'detalles' => 'array',
+        'errores' => 'array'
     ];
 
     public function setCodigoClienteAttribute($value){

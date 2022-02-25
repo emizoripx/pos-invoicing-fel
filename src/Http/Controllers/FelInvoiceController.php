@@ -3,6 +3,7 @@
 namespace EmizorIpx\PosInvoicingFel\Http\Controllers;
 
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
+use EmizorIpx\PosInvoicingFel\Jobs\GetInvoiceStatus;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
@@ -72,6 +73,8 @@ class FelInvoiceController extends Controller
             $initUpdate = microtime(true);
             $fel_invoice = $this->felinvoice_repo->update($fel_invoice);
             \Log::debug("TIME OF UPDATE DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initUpdate) );
+
+            GetInvoiceStatus::dispatch($fel_invoice)->delay( now()->addSeconds(10) );
 
             \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
             return response()->json([
