@@ -25,6 +25,8 @@ class FelInvoiceService extends BaseConnection {
 
     protected $type_document = 'compra-venta';
 
+    protected $cuf ;
+
     public function __construct($host)
     {
         parent::__construct($host);
@@ -32,6 +34,7 @@ class FelInvoiceService extends BaseConnection {
 
     public function setAccessToken($access_token)
     {
+        \Log::debug("SET ACCESS TOEKN >>>>>>>>>>>>>>>>>");
         $this->access_token = $access_token;
     }
 
@@ -54,6 +57,11 @@ class FelInvoiceService extends BaseConnection {
     public function setDataModel($data)
     {
         $this->data_model  = $data;
+    }
+
+    public function setCuf($cuf){
+        \Log::debug("SET CUF >>>>>>>>>>>>>>>>>>>>>>>>> ");
+        $this->cuf = $cuf;
     }
 
     public function checkPatameters(){
@@ -190,6 +198,29 @@ class FelInvoiceService extends BaseConnection {
             throw new PosInvoicingException("Error en la creación de la factura: " . $ex->getMessage() );
 
         }
+
+    }
+
+    public function getInvoiceStatus(){
+
+        \Log::debug("GET to : " . "/api/v1/facturas/$this->cuf/status" );
+
+        try{
+
+            $response = $this->client->request('GET', "/api/v1/facturas/$this->cuf/status", ["headers" => ["Authorization" => "Bearer " . $this->access_token]]);
+            
+            $r = json_decode( (string) $response->getBody(), true);
+            \Log::debug("............................................");
+            \Log::debug($r['data']);
+            return json_decode( (string) $response->getBody(), true);
+
+        } catch(Exception $ex){
+
+            \Log::error($ex->getMessage());
+
+            throw new PosInvoicingException("Error al Obtener el Estado de la factura: " . $ex->getMessage() );
+        }
+
 
     }
     

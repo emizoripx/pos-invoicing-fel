@@ -75,6 +75,18 @@ class FelInvoiceRepository {
         $this->data = $array_data;
     }
 
+    public function parseStatusResponse($data){
+
+        $array_data = [
+            'codigoEstado' => $data['codigoEstado'],
+            'estado' => $data['estado'],
+            'errores' => is_null($data['errores']) ? null : json_encode($data['errores']) ,
+        ];
+
+        $this->data = $array_data;
+
+    }
+
     public function create(){
         \Log::debug("Data To Save >>>>>>>>>>>>>>>>>>>>>>");
         \Log::debug(json_encode($this->data));
