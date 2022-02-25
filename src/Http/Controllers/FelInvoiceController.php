@@ -95,4 +95,30 @@ class FelInvoiceController extends Controller
 
 
     }
+
+    public function show( Request $request, $order_id ){
+
+        try{
+
+            $invoice = $this->felinvoice_repo->get($order_id);
+
+            if( !auth()->user() || auth()->user()->restaurant_id != $invoice->restorant_id){
+                throw new Exception(__('No Access.'));
+            }
+
+            return response()->json([
+                'status' => true,
+                'invoice'=> is_null($invoice) ? null : $invoice
+            ]);
+
+        } catch(Exception $ex){
+            return response()->json([
+                'status' => false,
+                'message'=> $ex->getMessage()
+            ]);
+        }
+        
+
+
+    }
 }
