@@ -99,4 +99,13 @@ class FelInvoiceRepository {
         return $model;
     }
 
+
+    public function get($order_id){
+
+        $invoice = FelInvoice::where('order_id', $order_id)->first();
+
+        return $invoice;
+
+    }
+
 }
