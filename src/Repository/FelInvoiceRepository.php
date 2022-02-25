@@ -80,7 +80,7 @@ class FelInvoiceRepository {
         $array_data = [
             'codigoEstado' => $data['codigoEstado'],
             'estado' => $data['estado'],
-            'errores' => is_null($data['errores']) ? null : json_encode($data['errores']) ,
+            'errores' => is_null($data['errores']) ? null : $data['errores'] ,
         ];
 
         $this->data = $array_data;
