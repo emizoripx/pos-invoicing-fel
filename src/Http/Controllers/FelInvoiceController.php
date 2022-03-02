@@ -7,7 +7,9 @@ use EmizorIpx\PosInvoicingFel\Jobs\GetInvoiceStatus;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
+use EmizorIpx\PosInvoicingFel\Repository\FelTokenRepository;
 use EmizorIpx\PosInvoicingFel\Services\Invoices\FelInvoiceService;
+use EmizorIpx\PosInvoicingFel\Utils\ActionTypes;
 use Exception;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
@@ -16,9 +18,12 @@ class FelInvoiceController extends Controller
 {
     protected $felinvoice_repo;
 
-    public function __construct( FelInvoiceRepository $felinvoice_repo )
+    protected $feltoken_repo;
+
+    public function __construct( FelInvoiceRepository $felinvoice_repo, FelTokenRepository $feltoken_repo )
     {
         $this->felinvoice_repo = $felinvoice_repo;    
+        $this->feltoken_repo = $feltoken_repo;
     }
 
     public function emit( Request $request, $order_id ){
@@ -74,7 +79,7 @@ class FelInvoiceController extends Controller
             $fel_invoice = $this->felinvoice_repo->update($fel_invoice);
             \Log::debug("TIME OF UPDATE DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initUpdate) );
 
-            GetInvoiceStatus::dispatch($fel_invoice)->delay( now()->addSeconds(10) );
+            GetInvoiceStatus::dispatch($fel_invoice, ActionTypes::EMIT)->delay( now()->addSeconds(10) );
 
             \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
             return response()->json([
@@ -119,6 +124,69 @@ class FelInvoiceController extends Controller
         }
         
 
+
+    }
+
+    public function revocate( Request $request, $order_id ){
+
+        try{
+            \Log::debug("Revocate Invoice >>>>>>>>>>>>>>>>>>>> Init");
+            $invoice = $this->felinvoice_repo->get($order_id);
+
+            if(is_null($invoice)){
+                throw new PosInvoicingException('No se encontro la factura');
+            }
+            
+            // if( !auth()->user() || auth()->user()->restaurant_id != $invoice->restorant_id){
+            //     throw new Exception(__('No Access.'));
+            // }
+
+            if(is_null($invoice->cuf)){
+                throw new PosInvoicingException('La factura no fue emitida');
+            }
+            if($invoice->codigoEstado == 691){
+                throw new PosInvoicingException('La Factura ya fue anulada');
+            }
+            if($invoice->codigoEstado != 690){
+                throw new PosInvoicingException('Sólo se puede anular un factura válida');
+            }
+
+            $codigoMotivoAnulacion = request('codigo_motivo_anulacion');
+            if(!isset($codigoMotivoAnulacion)){
+                throw new PosInvoicingException ("Código Motivo de Anulación es requerido");
+            }
+
+            $credentials = $this->feltoken_repo->getCredentials($invoice->restorant_id);
+
+            if( empty($credentials) ){
+                throw new PosInvoicingException ("No se tiene credenciales configuradas para anular Facturas");
+            }
+
+            $invoice_service = new FelInvoiceService($credentials->host);
+
+            $invoice_service->setAccessToken($credentials->access_token);
+
+            $invoice_service->setCuf($invoice->cuf);
+
+            $invoice_service->setRevocationReasonCode($codigoMotivoAnulacion);
+
+            $invoice_service->revocate();
+
+            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(10) );
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Factura Anulada',
+                'invoice'=>$invoice
+            ]);
+
+
+        } catch(PosInvoicingException | Exception $ex){
+            return response()->json([
+                'status' => false,
+                'message'=> $ex->getMessage()
+            ]);
+        }
 
     }
 }

@@ -28,6 +28,8 @@ class GetInvoiceStatus implements ShouldQueue
 
     protected $invoice ;
 
+    protected $action;
+
     protected $delay_times = [15, 30, 60, 120, 300, 600];
     protected $delay_offline = [1800, 3600, 10800, 18000, 36000,86400];
 
@@ -38,9 +40,10 @@ class GetInvoiceStatus implements ShouldQueue
      *
      * @return void
      */
-    public function __construct( FelInvoice $invoice )
+    public function __construct( FelInvoice $invoice, $action )
     {
         $this->invoice = $invoice;
+        $this->action = $action;
     }
 
 
@@ -104,8 +107,11 @@ class GetInvoiceStatus implements ShouldQueue
 
             $invoice_service = new FelInvoiceService($credentials->host);
 
+            \Log::debug("Set Access Token Jobs >>>>>>>>>>>>>>>");
+            
             $invoice_service->setAccessToken($credentials->access_token);
-
+            
+            \Log::debug("Set Cuf Jobs >>>>>>>>>>>>>>>");
             $invoice_service->setCuf($this->invoice->cuf);
 
             $response = $invoice_service->getInvoiceStatus();
@@ -126,7 +132,7 @@ class GetInvoiceStatus implements ShouldQueue
                 $this->fail();
             }
 
-            if( is_null ($response['data']['codigoEstado']) || !in_array($response['data']['codigoEstado'], StatusCodeInvoice::ARRAY_FINAL_STATUS) ){
+            if( is_null ($response['data']['codigoEstado']) || !in_array($response['data']['codigoEstado'], StatusCodeInvoice::getFinalStatusArray($this->action) ) ){
                 \Log::debug('GET INVOICE STATUS JOBS >>>>> La Factura aún esta Pendiente');
 
                 // $this->release(60);
