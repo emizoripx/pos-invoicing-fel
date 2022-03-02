@@ -137,9 +137,9 @@ class FelInvoiceController extends Controller
                 throw new PosInvoicingException('No se encontro la factura');
             }
             
-            // if( !auth()->user() || auth()->user()->restaurant_id != $invoice->restorant_id){
-            //     throw new Exception(__('No Access.'));
-            // }
+            if( !auth()->user() || auth()->user()->restaurant_id != $invoice->restorant_id){
+                throw new Exception(__('No Access.'));
+            }
 
             if(is_null($invoice->cuf)){
                 throw new PosInvoicingException('La factura no fue emitida');
