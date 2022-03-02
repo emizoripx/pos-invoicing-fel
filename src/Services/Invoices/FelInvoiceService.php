@@ -27,6 +27,8 @@ class FelInvoiceService extends BaseConnection {
 
     protected $cuf ;
 
+    protected $revocationReasonCode;
+
     public function __construct($host)
     {
         parent::__construct($host);
@@ -62,6 +64,10 @@ class FelInvoiceService extends BaseConnection {
     public function setCuf($cuf){
         \Log::debug("SET CUF >>>>>>>>>>>>>>>>>>>>>>>>> ");
         $this->cuf = $cuf;
+    }
+
+    public function setRevocationReasonCode($value){
+        $this->revocationReasonCode = $value;
     }
 
     public function checkPatameters(){
@@ -221,6 +227,34 @@ class FelInvoiceService extends BaseConnection {
             throw new PosInvoicingException("Error al Obtener el Estado de la factura: " . $ex->getMessage() );
         }
 
+
+    }
+
+
+    public function revocate(){
+
+        if(empty($this->cuf)){
+            throw new PosInvoicingException('El Cuf es necesario para emitir');
+        }
+        if(empty($this->revocationReasonCode)){
+            throw new PosInvoicingException('Motivo de anulación requerido.');
+        }
+
+        try{
+
+            $response = $this->client->request('DELETE', "/api/v1/facturas/$this->cuf/anular?codigoMotivoAnulacion=$this->revocationReasonCode", ["headers" => ["Authorization" => "Bearer " . $this->access_token]]);
+
+            $parsed_response = json_decode( (string) $response->getBody(), true);
+
+            if($parsed_response['status'] == 'error'){
+                throw new Exception($parsed_response['errors'][0]);
+            }
+            return $this->parse_response($response);
+
+        } catch(Exception $ex){
+            \Log::debug("Ocurrio un error al anular la factura");
+            throw new PosInvoicingException($ex->getMessage());
+        }
 
     }
     
