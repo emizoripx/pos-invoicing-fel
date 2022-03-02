@@ -31,10 +31,14 @@ class CreateFelInvoice
     {
         \Log::debug("Capture Events >>>>>>>>>>>>>> ");
 
-        \Log::debug($event->order->items);
+        \Log::debug($event->order);
 
         $this->fel_invoice_repo->prepareData($event->order, $event->fel_data);
         $this->fel_invoice_repo->prepareDetailsData($event->order->items);
+
+        if( $event->order->delivery_price > 0 ){
+            $this->fel_invoice_repo->addDeliveryItem($event->order->delivery_price);
+        }
         
         $this->fel_invoice_repo->create();
 

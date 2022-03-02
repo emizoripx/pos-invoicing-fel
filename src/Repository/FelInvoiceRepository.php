@@ -57,6 +57,29 @@ class FelInvoiceRepository {
         $this->data['detalles'] = $array_details;
     }
 
+    public function addDeliveryItem( $price ){
+
+        $array_detail = [];
+
+        $new = new stdClass();
+        $new->codigoProducto = 'DEL-2122331';
+        $new->descripcion = 'Delivery';
+        $new->cantidad = 1;
+        $new->precioUnitario = $price;
+        $new->subTotal = $price;
+        $new->montoDescuento = 0;
+        $new->unidadMedida = 58;
+
+        $array_detail[] = $new;
+
+        $this->data['detalles'] = array_merge($this->data['detalles'], $array_detail);
+
+        $this->data['montoTotal'] = $this->data['montoTotal'] + $price;
+        $this->data['montoTotalSujetoIva'] = $this->data['montoTotalSujetoIva'] + $price;
+
+
+    }
+
     public function parseResponseToSave($data){
         $array_data = [
             'cuf' => $data['cuf'],
