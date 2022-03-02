@@ -16,13 +16,17 @@ class ProductCreated
 
     public $item;
 
+    public $codigoUnidad;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct( Items $item )
+    public function __construct( Items $item, $codigoUnidad )
     {
         $this->item = $item;
+
+        $this->codigoUnidad = $codigoUnidad;
     }
 }

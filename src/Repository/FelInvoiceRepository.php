@@ -36,13 +36,13 @@ class FelInvoiceRepository {
 
         foreach ($items as $item) {
             $new = new stdClass();
-            $new->codigoProducto = $item->codigoProducto;
+            $new->codigoProducto = is_null($item->codigoProducto) ? $item->fel_product->codigoProducto :  $item->codigoProducto  ;
             $new->descripcion = $item->name;
             $new->cantidad = $item->pivot->qty;
             $new->precioUnitario = $item->pivot->variant_price;
             $new->subTotal = $item->pivot->variant_price * $item->pivot->qty;
             $new->montoDescuento = 0;
-            $new->unidadMedida = 58;
+            $new->unidadMedida = isset($item->fel_product) ? $item->fel_product->codigoUnidad : 58;
 
             $extras = json_decode($item->pivot->extras);
 
