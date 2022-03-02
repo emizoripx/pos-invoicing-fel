@@ -16,6 +16,7 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
     {
         //
         $this->loadRoutesFrom(__DIR__."/Routes/api.php");
+        $this->loadRoutesFrom(__DIR__."/Routes/web.php");
 
         // Event Service Provider
         $this->app->register(PosInvoicingFelEventServiceProvider::class);
