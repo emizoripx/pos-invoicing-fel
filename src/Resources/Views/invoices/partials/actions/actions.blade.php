@@ -1,1 +1,3 @@
-<button data-toggle="modal" data-target="#modal-time-to-prepare" onclick="$('#form-time-to-prepare').attr('action', '/updatestatus/accepted_by_restaurant/{{$invoice->id}}');" class="btn btn-sm " value="__(next_status)" /> __(next_status) </button>
+@if($invoice->codigoEstado == 691)  
+  <button data-toggle="modal" data-target="#modal-time-to-prepare" onclick="alert('Anular Factura?')" class="btn btn-sm " value="anular" /> Anular</button>
+@endif  
