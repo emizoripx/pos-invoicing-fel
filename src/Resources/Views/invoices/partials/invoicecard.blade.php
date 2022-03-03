@@ -4,7 +4,7 @@
         <form method="GET">
             <div class="row align-items-center">
                 <div class="col-8">
-                    <h3 class="mb-0">{{ __('Invoices') }}</h3>
+                    <h3 class="mb-0">{{ __('Facturas') }}</h3>
                 </div>
                 <div class="col-4 text-right">
                     <button id="show-hide-filters" class="btn btn-icon btn-1 btn-sm btn-outline-secondary" type="button">
