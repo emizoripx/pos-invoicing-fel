@@ -116,7 +116,7 @@ class FelInvoiceController extends Controller
 
         $invoices = $invoices->paginate(10);
 
-        return view('posinvoicingfel::example', [
+        return view('posinvoicingfel::invoices.index', [
             'invoices' => $invoices,
             'restorants'=>$restorants,
             // 'fields'=>[['class'=>'col-12', 'classselect'=>'noselecttwo', 'ftype'=>'select', 'name'=>'Driver', 'id'=>'driver', 'placeholder'=>'Assign Driver', 'data'=>$driversData, 'required'=>true]],

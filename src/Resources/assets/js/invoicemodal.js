@@ -87,16 +87,16 @@ window.onload = function () {
 function verFactura(idOrder){
   console.log('ver factura :: idorder ', idOrder);
   $('#indicator').show();
-  axios.get(`/posfel/invoice/${idOrder}`).then(function (response) {     
+  axios.get(`/posfel/v1/invoice/${idOrder}`).then(function (response) {     
      
      $('#indicator').hide();
- 
-     $('#modalPayment').modal('hide');
+     console.log('ver factura :: response.data ', response.data);
+    //  $('#modalPayment').modal('hide');
      //Call to get the total price and items     
- 
-     if(response.status){       
+     console.log('ver factura :: response.data.status ', response.data.status);
+     if(response.data.status){       
        js.notify('Factura obtenida.', "success");
-       receiptPOSInvoiceView.invoice=response.invoice;
+       receiptPOSInvoiceView.invoice=response.data.invoice;
       
        $('#modalPOSInvoiceView').modal('show');
      }else{      
