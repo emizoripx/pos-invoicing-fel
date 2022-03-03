@@ -4,9 +4,10 @@
         @if(auth()->user()->hasRole('admin'))
             <th scope="col">{{ __('Restaurant') }}</th>
         @endif
-        <th class="table-web" scope="col">{{ __('Created') }}</th>
-        <th class="table-web" scope="col">{{ !config('settings.is_whatsapp_ordering_mode') ? __('Table / Method') : __('Method') }}</th>
-        <th class="table-web" scope="col">{{ __('Items') }}</th>
+        <th class="table-web" scope="col">{{ __('# Factura') }}</th>
+        <th class="table-web" scope="col">{{ __('Fecha Emisión') }}</th>
+        <th class="table-web" scope="col">{{ __('NIT/CI') }}</th>
+        <th class="table-web" scope="col">{{ __('Razón Social') }}</th>        
         <th class="table-web" scope="col">{{ __('Price') }}</th>
         <th scope="col">{{ __('Last status') }}</th>
         <th scope="col">{{ __('Actions') }}</th>
@@ -33,19 +34,23 @@
     @endif
 
     <td class="table-web">
-        {{ $invoice->created_at->locale(Config::get('app.locale'))->isoFormat('LLLL')  }}
+        {{ $invoice->numeroFactura }}
     </td>
     <td class="table-web">
-        invoice->getExpeditionType()
+        {{ date('d/m/Y h:i:s', strtotime($invoice->fechaEmision)) }}
     </td>
     <td class="table-web">
-        {{ count($invoice->detalles) }}
+        {{ $invoice->numeroDocumento }}
     </td>
+    <td class="table-web">
+        {{ $invoice->nombreRazonSocial }}
+    </td>
+    
     <td class="table-web">
         @money( $invoice->montoTotal, config('settings.cashier_currency'),config('settings.do_convertion'))
     </td>
     <td>
-        include('posinvoicingfel::invoices.partials.laststatus
+        @include('posinvoicingfel::invoices.partials.laststatus')
     </td>
     @include('posinvoicingfel::invoices.partials.actions.table',['invoice' => $invoice ])
 </tr>

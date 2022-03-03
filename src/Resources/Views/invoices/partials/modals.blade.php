@@ -172,92 +172,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                {{-- EPOS-INSERT --}}
-                <div class="row">
-                    <form role="form text-left">
-                        <label>*{{ __('Razón Social')}}</label>
-                        <div class="input-group mb-3">
-                            <input type="text" id="name_client" class="form-control" placeholder="Nombre / Razón Social" aria-label="o" required autofocus>
-                        </div>
-                    </form>
-                </div>
-                {{-- EPOS-END --}}
-                <div class="row">
-                    <div class="col">
-                        <form role="form text-left">
-                            {{-- EPOS-INSERT --}}
-                            <label>{{ __('Tipo Documento') }}</label>
-                            <div class="input-group mb-3">
-                                <select @change="onChange($event)" class="form-control noselecttwo" id="documentType" >
-                                    <option value="5">{{ __('NIT') }}</option>
-                                    <option value="1">{{ __('CI') }}</option>
-                                </select>
-                            </div>
-                            {{-- EPOS-END --}}
-                            <label>{{ __('Payment method') }}</label>
-                            <div class="input-group mb-3">
-                                <select @change="onChange($event)" class="form-control noselecttwo" id="paymentType" >
-                                    <option value="cash">{{ __('Cash') }}</option>
-                                    <option value="cardterminal">{{ __('Card terminal') }}</option>
-                                    <option value="onlinepayments">{{ __('Online payments') }}</option>
-                                </select>
-                            </div>
-                            <label>{{ __('Total') }}</label>
-                            <p class="h2">@{{ totalPriceFormat }} </p>
 
-
-                        </form>
-                    </div>
-                    <div class="col">
-                        <form role="form text-left">
-                            {{-- EPOS-INSERT --}}
-                            <label>*{{ __('Número Documento')}}</label>
-                            <div class="input-group mb-3">
-                                <input type="text" id="document_number" class="form-control" placeholder="NIT / CI" aria-label="o" required autofocus>
-                            </div>
-                            {{-- EPOS-END --}}
-                            <label>{{ __('Received ammount')}}</label>
-                            <div class="input-group mb-3">
-                                <input type="text" v-model="received" class="form-control" placeholder="0" aria-label="o" autofocus>
-                            </div>
-                            <label>{{ __('Change') }}</label>
-                            <p class="h2 text-success">@{{ received-totalPrice>0?(received-totalPrice).toFixed(2):0 }}
-                            </p>
-
-                            <label>{{ __('Remaining') }}</label>
-                            <p class="h2 text-danger">@{{ totalPrice-received>0?(totalPrice-received).toFixed(2):0 }}
-                            </p>
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer" v-cloak>
-
-                <i id="indicator" style="display: none" class="fas fa-spinner fa-spin"></i>
-                <button data-bs-dismiss="modal" class="btn bg-gradient-default">{{ __('Close') }}</button>
-                <button type="button" id="submitInvoicePOS" onclick="submitOrderPOS('invoice')" class="btn bg-gradient-primary">
-                    <span class="btn-inner--text">Anular Factura</span>
-                    <span class="btn-inner--icon"><i class="ni ni-curved-next"></i></span>
-                </button>
-            </div>
-        </div>
-    </div>
-<!-- End POS invoice Modal -->
-<!--  anular invoice Modal -->
-<div class="modal  fade " id="modalAnularInvoiceView" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true" style="overflow: scroll;">
-    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="modal-title-default">{{ __('POS Invoice')}}</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <div id="anularInvoiceView" class="ml-1">
+                <div id="posReciptInvoiceView" class="ml-1">
                     <center>
                         <div>
                             <p style="font-size: 10pt !important;" class="m-0 p-0"><b >FACTURA</b></p>
@@ -371,6 +287,56 @@
                         <button id="printPosInvoiceView" class="btn bg-gradient-primary">{{ __('Print') }}</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+<!-- End POS invoice Modal -->
+<!--  anular invoice Modal -->
+<div class="modal  fade " id="modalAnularInvoiceView" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true" style="overflow: scroll;">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-default">{{ __('POS Invoice')}}</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{-- EPOS-INSERT --}}
+                <div class="row">
+                    <form role="form text-left">
+                        <label>*{{ __('Razón Social')}}</label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="name_client" class="form-control" placeholder="Nombre / Razón Social" aria-label="o" required autofocus>
+                        </div>
+                    </form>
+                </div>
+                {{-- EPOS-END --}}
+                <div class="row">
+                    <div class="col">
+                        <form role="form text-left">
+                            {{-- EPOS-INSERT --}}
+                            <label>{{ __('Tipo Documento') }}</label>
+                            <div class="input-group mb-3">
+                                <select @change="onChange($event)" class="form-control noselecttwo" id="documentType" >
+                                    <option value="5">{{ __('NIT') }}</option>
+                                    <option value="1">{{ __('CI') }}</option>
+                                </select>
+                            </div>
+                            {{-- EPOS-END --}}
+                        </form>
+                    </div>                    
+                </div>
+
+            </div>
+            <div class="modal-footer" >
+
+                <i id="indicator" style="display: none" class="fas fa-spinner fa-spin"></i>
+                <button data-bs-dismiss="modal" class="btn">{{ __('Close') }}</button>
+                <button type="button" id="submitInvoicePOS" onclick="submitOrderPOS('invoice')" class="btn bg-gradient-primary">
+                    <span class="btn-inner--text text-secondary">Anular Factura</span>
+                    <span class="btn-inner--icon text-secondary"><i class="ni ni-curved-next"></i></span>
+                </button>
             </div>
         </div>
     </div>

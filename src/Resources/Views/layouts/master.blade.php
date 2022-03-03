@@ -145,35 +145,31 @@
         });
       //FEL
         //INterval getting orders
-        setInterval(() => {
-          getAllOrders();
-
-        }, 12000);
 
 
-        $('#orderTo').select2({
-            dropdownParent: $('#modalSwitchTables')
-        });
-        $('#orderFrom').select2({
-            dropdownParent: $('#modalSwitchTables')
-        });
-        $('#swithTableButton').on('click',function(e){
-          $('#modalSwitchTables').modal('hide');
-          doMoveOrder($('#orderFrom').val(),$('#orderTo').val());
-        })
+        // $('#orderTo').select2({
+        //     dropdownParent: $('#modalSwitchTables')
+        // });
+        // $('#orderFrom').select2({
+        //     dropdownParent: $('#modalSwitchTables')
+        // });
+        // $('#swithTableButton').on('click',function(e){
+        //   $('#modalSwitchTables').modal('hide');
+        //   doMoveOrder($('#orderFrom').val(),$('#orderTo').val());
+        // })
 
       
-        $('.select2init').select2({
-          id:"-1",
-          placeholder:"Search ..."
-        });
+        // $('.select2init').select2({
+        //   id:"-1",
+        //   placeholder:"Search ..."
+        // });
 
-        $('select').on('change', function() {
-          if(this.id=="itemsSelect"&&this.value!=""){
-            setCurrentItem( this.value );
-          }
+        // $('select').on('change', function() {
+        //   if(this.id=="itemsSelect"&&this.value!=""){
+        //     setCurrentItem( this.value );
+        //   }
           
-        });
+        // });
 
 
         // Initialize the select2.

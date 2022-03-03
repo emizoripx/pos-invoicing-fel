@@ -1,44 +1,35 @@
 
 "use strict";
 var receiptPOSInvoiceView=null;
+var anularInvoiceView=null;
 
 
 function anularFactura(idOrder,opcion){
   
   console.log('anular :: idorder ', idOrder, ' opcion  ', opcion);
 
-//   axios.post(withSession(`/posfel/emit/${idOrder}`), {}).then(function (response) {
+  axios.post(`/posfel/v1/anular/${idOrder}`, {}).then(function (response) {
      
-//      $('#submitOrderPOS').show();
-//      $('#indicator').hide();
+    //  $('#submitOrderPOS').show();
+     $('#indicator').hide();
  
-//      $('#modalPayment').modal('hide');
-//      //Call to get the total price and items
-//      getCartContentAndTotalPrice();
+    //  $('#modalPayment').modal('hide');
+     //Call to get the total price and items
  
-//      if(response.data.status){
-//        window.showOrders();
-//        js.notify(response.data.message, "success");
-//        receiptPOSInvoice.invoice=response.data.invoice;
-      
-//        $('#modalPOSInvoice').modal('show');
-//      }else{
-//       if(opcion == 2){
-//         $('#submitInvoicePOSOrder').show();
-//         $('#printPos').show();
-//         $('#modalPOSOrder').modal('show');
-//       }
-//        js.notify(response.data.message, "warning");
-//      }
+     if(response.data.status){       
+       js.notify(response.data.message, "success");
+     }else{      
+       js.notify(response.data.message, "warning");
+     }
      
      
-//    }).catch(function (error) {
+   }).catch(function (error) {
      
-//      $('#posReciptInvoice').modal('hide');
-//      $('#submitOrderPOS').show();
-//      $('#indicator').hide();
-//      js.notify(error, "warning");
-//    });
+    //  $('#posReciptInvoice').modal('hide');
+    //  $('#submitOrderPOS').show();
+     $('#indicator').hide();
+     js.notify(error, "warning");
+   });
 }
 
 window.onload = function () {
@@ -76,6 +67,35 @@ window.onload = function () {
         var formated=formatter.format(price);
 
         return formated;
+      },
+      date: function (date) {
+        return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+      }
+    },
+  });
+  anularInvoiceView=new Vue({
+    el:"#modalAnularInvoiceView",
+    data:{
+      invoice:null
+    },
+
+    methods: {
+      moment: function (date) {
+        return moment(date);
+      },
+      decodeHtml: function (html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+
+        console.log("specia");
+        console.log(txt.value)
+        return txt.value;
+      },
+      formatPrice(price){
+
+        
+
+        return price;
       },
       date: function (date) {
         return moment(date).format('MMMM Do YYYY, h:mm:ss a');
