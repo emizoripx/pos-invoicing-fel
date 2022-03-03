@@ -2,6 +2,9 @@
 
 namespace EmizorIpx\PosInvoicingFel\Http\Controllers;
 
+use App\Exports\OrdersExport;
+use App\Restorant;
+use App\User;
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Jobs\GetInvoiceStatus;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
@@ -13,6 +16,8 @@ use EmizorIpx\PosInvoicingFel\Utils\ActionTypes;
 use Exception;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+
+use Maatwebsite\Excel\Facades\Excel;
 
 class FelInvoiceController extends Controller
 {
@@ -26,167 +31,158 @@ class FelInvoiceController extends Controller
         $this->feltoken_repo = $feltoken_repo;
     }
 
-    public function emit( Request $request, $order_id ){
-        try{
-            $init = microtime(true);
 
-            if(!auth()->user()){
-                throw new Exception('La Sesión caducó, Por vuelva a iniciar sesión');
-            }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
 
-            \Log::debug("Emitir Factura >>>>>>>>>>>>>>>>>> ");
+        $restorants = Restorant::where(['active'=>1])->get();
+        // $drivers = User::role('driver')->where(['active'=>1])->get();
 
-            $fel_invoice = FelInvoice::where('order_id', $order_id)->first();
+        // $driversData = [];
+        // foreach ($drivers as $key => $driver) {
+        //     $driversData[$driver->id] = $driver->name;
+        // }
 
-            if( empty($fel_invoice) ){
-                throw new Exception('No se encontro una orden asociada para crear la Factura');
-            }
+        $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->orderBy('created_at', 'desc');
 
-            if( $fel_invoice->cuf != null ){
-                throw new Exception('La orden #'. $fel_invoice->order_id .' ya fue Facturada');
-            }
+        //Get client's orders
+        // if (auth()->user()->hasRole('owner')) {
+             
+        //     //Change currency
+        //     ConfChanger::switchCurrency(auth()->user()->restorant);
 
-            
-            \Log::debug("Buscar Token >>>>>>>>>>>>>>>>>> ");
-            $fel_token = FelToken::where('restorant_id', $fel_invoice->restorant_id)->first();
-            
-            if( empty($fel_token) ){
-                throw new Exception('No se tiene credenciales configuradas para emitir Facturas');
-            }
+        //     $orders = $invoices->where(['restorant_id'=>auth()->user()->restorant->id]);
+        // }
 
-            $invoice_service = new FelInvoiceService( $fel_token->host );
 
-            \Log::debug("Set Token >>>>>>>>>>>>>>>>>> ");
-            $invoice_service->setAccessToken($fel_token->access_token);
-
-            \Log::debug("Set Data >>>>>>>>>>>>>>>>>> ");
-            $initBuild = microtime(true);
-            $invoice_service->buildData($fel_invoice);
-            \Log::debug("TIME OF BUILD DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initBuild) );
-
-            \Log::debug("Enviar a FEL >>>>>>>>>>>>>>>>>> ");
-            $initSendFel = microtime(true);
-            $invoice_service->sendToFel();
-            \Log::debug("TIME OF SEND FEL >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initSendFel) );
-
-            \Log::debug("Parse Response >>>>>>>>>>>>>>>>>> ");
-            $initParseData = microtime(true);
-            $this->felinvoice_repo->parseResponseToSave($invoice_service->getResponse());
-            \Log::debug("TIME OF PARSE DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initParseData));
-
-            \Log::debug("Actualizar Factura >>>>>>>>>>>>>>>>>> ");
-            $initUpdate = microtime(true);
-            $fel_invoice = $this->felinvoice_repo->update($fel_invoice);
-            \Log::debug("TIME OF UPDATE DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initUpdate) );
-
-            GetInvoiceStatus::dispatch($fel_invoice, ActionTypes::EMIT)->delay( now()->addSeconds(10) );
-
-            \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
-            return response()->json([
-                'status' => true,
-                'message' => 'Factura Enviada',
-                'invoice'=>$fel_invoice
-            ]);
-
-        
-        } catch(PosInvoicingException | Exception $ex){
-            \Log::debug("Error en la Emisión: " . $ex->getMessage());
-
-            return response()->json([
-                'status' => false,
-                'message'=> $ex->getMessage()
-            ]);
+        //BY DATE FROM
+        if (isset($_GET['fromDate']) && strlen($_GET['fromDate']) > 3) {
+            $invoices = $invoices->whereDate('created_at', '>=', $_GET['fromDate']);
         }
 
+        //BY DATE TO
+        if (isset($_GET['toDate']) && strlen($_GET['toDate']) > 3) {
+            $invoices = $invoices->whereDate('created_at', '<=', $_GET['toDate']);
+        }
+
+        //FILTER BT status
+        // if (isset($_GET['status_id'])) {
+        //     $invoices = $invoices->whereHas('laststatus', function($q){
+        //         $q->where('status_id', $_GET['status_id']);
+        //     });
+        // }
+
+
+        //With downloaod
+        // if (isset($_GET['report'])) {
+        //     $items = [];
+        //     foreach ($invoices->get() as $key => $order) {
+        //         $item = [
+        //             'order_id'=>$order->id,
+        //             'restaurant_name'=>$order->restorant->name,
+        //             'restaurant_id'=>$order->restorant_id,
+        //             'created'=>$order->created_at,
+        //             'last_status'=>$order->status->pluck('alias')->last(),
+        //             'client_name'=>$order->client ? $order->client->name : '',
+        //             'client_id'=>$order->client ? $order->client_id : null,
+        //             'table_name'=>$order->table ? $order->table->name : '',
+        //             'table_id'=>$order->table ? $order->table_id : null,
+        //             'area_name'=>$order->table && $order->table->restoarea ? $order->table->restoarea->name : '',
+        //             'area_id'=>$order->table && $order->table->restoarea ? $order->table->restoarea->id : null,
+        //             'address'=>$order->address ? $order->address->address : '',
+        //             'address_id'=>$order->address_id,
+        //             'driver_name'=>$order->driver ? $order->driver->name : '',
+        //             'driver_id'=>$order->driver_id,
+        //             'order_value'=>$order->order_price_with_discount,
+        //             'order_delivery'=>$order->delivery_price,
+        //             'order_total'=>$order->delivery_price + $order->order_price_with_discount,
+        //             'payment_method'=>$order->payment_method,
+        //             'srtipe_payment_id'=>$order->srtipe_payment_id,
+        //             'order_fee'=>$order->fee_value,
+        //             'restaurant_fee'=>$order->fee,
+        //             'restaurant_static_fee'=>$order->static_fee,
+        //             'vat'=>$order->vatvalue,
+        //           ];
+        //         array_push($items, $item);
+        //     }
+
+        //     return Excel::download(new OrdersExport($items), 'orders_'.time().'.xlsx');
+        // }
+
+        $invoices = $invoices->paginate(10);
+
+        return view('posinvoicingfel::example', [
+            'invoices' => $invoices,
+            'restorants'=>$restorants,
+            // 'fields'=>[['class'=>'col-12', 'classselect'=>'noselecttwo', 'ftype'=>'select', 'name'=>'Driver', 'id'=>'driver', 'placeholder'=>'Assign Driver', 'data'=>$driversData, 'required'=>true]],
+            'parameters'=>count($_GET) != 0,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+    }
+
+    
+    public function store(Request $request){
 
     }
 
-    public function show( Request $request, $order_id ){
 
-        try{
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Order $order)
+    {
+    }
 
-            $invoice = $this->felinvoice_repo->get($order_id);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
 
-            if( !auth()->user() || auth()->user()->restaurant_id != $invoice->restorant_id){
-                throw new Exception(__('No Access.'));
-            }
-
-            return response()->json([
-                'status' => true,
-                'invoice'=> is_null($invoice) ? null : $invoice
-            ]);
-
-        } catch(Exception $ex){
-            return response()->json([
-                'status' => false,
-                'message'=> $ex->getMessage()
-            ]);
-        }
-        
-
+    /**
+     * Update the order item count
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request,Order $order)
+    {
 
     }
 
-    public function revocate( Request $request, $order_id ){
-
-        try{
-            \Log::debug("Revocate Invoice >>>>>>>>>>>>>>>>>>>> Init");
-            $invoice = $this->felinvoice_repo->get($order_id);
-
-            if(is_null($invoice)){
-                throw new PosInvoicingException('No se encontro la factura');
-            }
-            
-            if( !auth()->user() || auth()->user()->restaurant_id != $invoice->restorant_id){
-                throw new Exception(__('No Access.'));
-            }
-
-            if(is_null($invoice->cuf)){
-                throw new PosInvoicingException('La factura no fue emitida');
-            }
-            if($invoice->codigoEstado == 691){
-                throw new PosInvoicingException('La Factura ya fue anulada');
-            }
-            if($invoice->codigoEstado != 690){
-                throw new PosInvoicingException('Sólo se puede anular un factura válida');
-            }
-
-            $codigoMotivoAnulacion = request('codigo_motivo_anulacion');
-            if(!isset($codigoMotivoAnulacion)){
-                throw new PosInvoicingException ("Código Motivo de Anulación es requerido");
-            }
-
-            $credentials = $this->feltoken_repo->getCredentials($invoice->restorant_id);
-
-            if( empty($credentials) ){
-                throw new PosInvoicingException ("No se tiene credenciales configuradas para anular Facturas");
-            }
-
-            $invoice_service = new FelInvoiceService($credentials->host);
-
-            $invoice_service->setAccessToken($credentials->access_token);
-
-            $invoice_service->setCuf($invoice->cuf);
-
-            $invoice_service->setRevocationReasonCode($codigoMotivoAnulacion);
-
-            $invoice_service->revocate();
-
-            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(10) );
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Factura Anulada',
-                'invoice'=>$invoice
-            ]);
-
-
-        } catch(PosInvoicingException | Exception $ex){
-            return response()->json([
-                'status' => false,
-                'message'=> $ex->getMessage()
-            ]);
-        }
-
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
+
+
+    
 }

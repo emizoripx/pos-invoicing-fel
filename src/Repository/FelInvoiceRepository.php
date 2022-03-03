@@ -36,13 +36,13 @@ class FelInvoiceRepository {
 
         foreach ($items as $item) {
             $new = new stdClass();
-            $new->codigoProducto = $item->codigoProducto;
+            $new->codigoProducto = is_null($item->codigoProducto) ? $item->fel_product->codigoProducto :  $item->codigoProducto  ;
             $new->descripcion = $item->name;
             $new->cantidad = $item->pivot->qty;
             $new->precioUnitario = $item->pivot->variant_price;
             $new->subTotal = $item->pivot->variant_price * $item->pivot->qty;
             $new->montoDescuento = 0;
-            $new->unidadMedida = 58;
+            $new->unidadMedida = isset($item->fel_product) ? $item->fel_product->codigoUnidad : 58;
 
             $extras = json_decode($item->pivot->extras);
 
@@ -55,6 +55,29 @@ class FelInvoiceRepository {
         }
 
         $this->data['detalles'] = $array_details;
+    }
+
+    public function addDeliveryItem( $price ){
+
+        $array_detail = [];
+
+        $new = new stdClass();
+        $new->codigoProducto = 'DEL-2122331';
+        $new->descripcion = 'Delivery';
+        $new->cantidad = 1;
+        $new->precioUnitario = $price;
+        $new->subTotal = $price;
+        $new->montoDescuento = 0;
+        $new->unidadMedida = 58;
+
+        $array_detail[] = $new;
+
+        $this->data['detalles'] = array_merge($this->data['detalles'], $array_detail);
+
+        $this->data['montoTotal'] = $this->data['montoTotal'] + $price;
+        $this->data['montoTotalSujetoIva'] = $this->data['montoTotalSujetoIva'] + $price;
+
+
     }
 
     public function parseResponseToSave($data){
