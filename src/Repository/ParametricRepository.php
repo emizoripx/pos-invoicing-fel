@@ -13,7 +13,7 @@ class ParametricRepository {
 
     public function get($type){
 
-        $parametrics = \DB::table(Parametrics::getTableName($type))->where('is_active')->get();
+        $parametrics = \DB::table(Parametrics::getTableName($type))->where('is_active', true)->get();
 
         return $parametrics;
 
