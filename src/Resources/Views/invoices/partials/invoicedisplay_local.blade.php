@@ -36,16 +36,16 @@
         {{ $invoice->created_at->locale(Config::get('app.locale'))->isoFormat('LLLL')  }}
     </td>
     <td class="table-web">
-        {{ $invoice->getExpeditionType() }}
+        invoice->getExpeditionType()
     </td>
     <td class="table-web">
-        {{ count($invoice->items) }}
+        {{ count($invoice->detalles) }}
     </td>
     <td class="table-web">
-        @money( $invoice->order_price_with_discount, config('settings.cashier_currency'),config('settings.do_convertion'))
+        @money( $invoice->montoTotal, config('settings.cashier_currency'),config('settings.do_convertion'))
     </td>
     <td>
-        @include('posinvoicingfel::invoices.partials.laststatus')
+        include('posinvoicingfel::invoices.partials.laststatus
     </td>
     @include('posinvoicingfel::invoices.partials.actions.table',['invoice' => $invoice ])
 </tr>

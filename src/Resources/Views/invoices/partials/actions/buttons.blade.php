@@ -1,6 +1,7 @@
 @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('owner') || auth()->user()->hasRole('driver'))
 <?php
-$lastStatusAlisas=$invoice->status->pluck('alias')->last();
+$lastStatusAlisas= "just_created";
+// =$invoice->status->pluck('alias')->last();
 ?>
 <div class="card-footer py-4">
     <h6 class="heading-small text-muted mb-4">{{ __('Actions') }}</h6   >

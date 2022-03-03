@@ -1,5 +1,6 @@
 <?php
-$lastStatusAlisas=$invoice->status->pluck('alias')->last();
+$lastStatusAlisas='just_created'
+// invoice->status->pluck('alias')->last();
 ?>
 @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('owner') || auth()->user()->hasRole('driver') || auth()->user()->hasRole('staff'))
     @if(auth()->user()->hasRole('admin'))
