@@ -20,7 +20,7 @@ class ParametricRepository {
     }
     public function getPluck($type){
 
-        $parametrics = \DB::table(Parametrics::getTableName($type))->where('is_active')->pluck('descripcion', 'codigo')->all();
+        $parametrics = \DB::table(Parametrics::getTableName($type))->where('is_active', true)->pluck('descripcion', 'codigo')->all();
 
         return $parametrics;
 
