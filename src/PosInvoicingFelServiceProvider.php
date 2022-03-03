@@ -38,5 +38,7 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
 
         // VIEWS
         $this->loadViewsFrom(__DIR__ . "/Resources/Views", "posinvoicingfel");
+        //assets
+        $this->publishes([__DIR__.'/Resources/assets' => public_path('vendor/posinvoicingfel'),], 'public');
     }
 }
