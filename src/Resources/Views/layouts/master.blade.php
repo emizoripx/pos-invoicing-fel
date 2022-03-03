@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
@@ -33,7 +33,7 @@
   <script src="{{ asset('vendor') }}/fa/fa.js" crossorigin="anonymous"></script>
   <link href="{{ asset('softd') }}/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
-  <link id="pagestyle" href="{{ asset('softd') }}/css/soft-ui-dashboard.css?v=1.0.1" rel="stylesheet" />
+  
 
   <!-- Select2  -->
   <link type="text/css" href="{{ asset('custom') }}/css/select2.min.css" rel="stylesheet">
