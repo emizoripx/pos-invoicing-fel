@@ -2,6 +2,7 @@
 
 namespace EmizorIpx\PosInvoicingFel;
 
+use EmizorIpx\PosInvoicingFel\Console\Commands\SyncParametrics;
 use EmizorIpx\PosInvoicingFel\Providers\PosInvoicingFelEventServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -39,5 +40,21 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
 
         // VIEWS
         $this->loadViewsFrom(__DIR__ . "/Resources/Views", "posinvoicingfel");
+
+        # CONFIG FILE
+        $this->publishes([
+            __DIR__."/Config/posinvoicingfel.php" => config_path('posinvoicingfel.php')
+        ]);
+
+        $this->mergeConfigFrom(__DIR__.'/Config/posinvoicingfel.php', 'posinvoicingfel');
+
+        // LOAD COMMANDS
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                SyncParametrics::class
+                
+            ]);
+        }
     }
 }
