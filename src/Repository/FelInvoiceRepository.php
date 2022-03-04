@@ -60,12 +60,14 @@ class FelInvoiceRepository {
         $this->data['detalles'] = $array_details;
     }
 
-    public function addDeliveryItem( $price ){
+    public function addDeliveryItem( $price, $item ){
 
         $array_detail = [];
 
         $new = new stdClass();
         $new->codigoProducto = getenv('PRODUCT_CODE_DELIVERY');
+        $new->codigoProductoSin =  $item->fel_product->codigoProductoSin;
+        $new->codigoActividadEconomica =  $item->fel_product->codigoActividadEconomica;
         $new->descripcion = 'Delivery';
         $new->cantidad = 1;
         $new->precioUnitario = $price;

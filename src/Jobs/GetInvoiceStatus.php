@@ -71,9 +71,11 @@ class GetInvoiceStatus implements ShouldQueue
      *
      * @return void
      */
-    public function handle( FelTokenRepository $fel_token_repo, FelInvoiceRepository $fel_invoice_repo )
+    public function handle( FelTokenRepository $fel_token_repo)
     {
         try{
+
+            $fel_invoice_repo = new FelInvoiceRepository ();
 
             \Log::debug("GET INVOICE STATUS JOBS INIT >>>>>>>>>>>>>>>>>>>>> #". $this->invoice->numeroFactura . " Attempts #". $this->attempts());
 
