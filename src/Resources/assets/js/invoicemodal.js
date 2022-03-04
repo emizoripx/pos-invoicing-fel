@@ -6,28 +6,32 @@ var anularInvoiceView=null;
 
 function anularFactura(idOrder,opcion){
   
-  console.log('anular :: idorder ', idOrder, ' opcion  ', opcion);
-
-  axios.post(`/posfel/v1/anular/${idOrder}`, {}).then(function (response) {
-     
-    //  $('#submitOrderPOS').show();
-     $('#indicator').hide();
- 
+  console.log('anular :: idFacrtura ', idOrder, ' opcion  ', opcion);
+  $('#indicatoranular').show();
+  $('#botonanular').hide();
+  axios.delete(`/posfel/v1/revocate/${idOrder}`, {}).then(function (response) {
+    
+    
+     $('#botonanular').show();
+     $('#indicatoranular').hide();
     //  $('#modalPayment').modal('hide');
      //Call to get the total price and items
  
      if(response.data.status){       
+        anularInvoiceView.motivoAnulacion='0';
+        $('#modalAnularInvoiceView').modal('hide');
        js.notify(response.data.message, "success");
-     }else{      
+       window.location.reload();
+     }else{            
        js.notify(response.data.message, "warning");
      }
      
      
    }).catch(function (error) {
-     
-    //  $('#posReciptInvoice').modal('hide');
-    //  $('#submitOrderPOS').show();
-     $('#indicator').hide();
+    
+    //  $('#modalAnularInvoiceView').modal('hide');
+     $('#botonanular').show();
+     $('#indicatoranular').hide();
      js.notify(error, "warning");
    });
 }
@@ -76,7 +80,9 @@ window.onload = function () {
   anularInvoiceView=new Vue({
     el:"#modalAnularInvoiceView",
     data:{
-      invoice:null
+      idinvoice:null,
+      motivosAnulacion:[],
+      motivoAnulacion:'0'
     },
 
     methods: {
@@ -99,9 +105,44 @@ window.onload = function () {
       },
       date: function (date) {
         return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+      },
+      getMotivosAnulacion(){
+        axios.get(`/posfel/v1/revocation-reason`).then(function (response) {     
+     
+          
+          console.log('ver motivos anulacion :: response.data ', response.data);        
+         
+          if(response.data.status){       
+            js.notify('Motivos de anulación obtenidos.', "success");
+            anularInvoiceView.motivosAnulacion=response.data.data;
+            console.log('ver motivos anulacion :: anularInvoiceView.motivosAnulacion ', anularInvoiceView.motivosAnulacion);        
+          }else{      
+            js.notify('No existen motivos de anulación', "warning");
+          }
+          
+        }).catch(function (error) {     
+          
+          $('#indicator').hide();
+          js.notify(error, "warning");
+        });
+      },
+      anular(){
+        if(anularInvoiceView.motivoAnulacion != '0'){
+          anularFactura(anularInvoiceView.idinvoice, anularInvoiceView.motivoAnulacion);
+        } else {
+          js.notify('Debe seleccionar un motivo de anulación', "warning");
+        }
       }
     },
+    created: function(){
+      this.getMotivosAnulacion();
+    }
   });
+}
+
+function verAnularFactura(idFactura){
+  anularInvoiceView.idinvoice = idFactura;
+  $('#modalAnularInvoiceView').modal('show');
 }
 
 function verFactura(idOrder){
