@@ -1,10 +1,10 @@
 <thead class="thead-light">
     <tr>
-        <th scope="col">{{ __('ID') }}</th>
+        <th scope="col">{{ __('# Factura') }}</th>
         @if(auth()->user()->hasRole('admin'))
             <th scope="col">{{ __('Restaurant') }}</th>
         @endif
-        <th class="table-web" scope="col">{{ __('# Factura') }}</th>
+        <th class="table-web" scope="col">{{ __('ID Orden') }}</th>
         <th class="table-web" scope="col">{{ __('Fecha Emisión') }}</th>
         <th class="table-web" scope="col">{{ __('NIT/CI') }}</th>
         <th class="table-web" scope="col">{{ __('Razón Social') }}</th>        
@@ -34,7 +34,7 @@
     @endif
 
     <td class="table-web">
-        {{ $invoice->numeroFactura }}
+        {{ $invoice->order_id }}
     </td>
     <td class="table-web">
         {{ date('d/m/Y h:i:s', strtotime($invoice->fechaEmision)) }}

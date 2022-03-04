@@ -37,6 +37,8 @@ class FelInvoiceRepository {
         foreach ($items as $item) {
             $new = new stdClass();
             $new->codigoProducto = is_null($item->codigoProducto) ? $item->fel_product->codigoProducto :  $item->codigoProducto  ;
+            $new->codigoProductoSin =  $item->fel_product->codigoProductoSin;
+            $new->codigoActividadEconomica =  $item->fel_product->codigoActividadEconomica;
             $new->descripcion = $item->name;
             $new->cantidad = $item->pivot->qty;
             $new->precioUnitario = $item->pivot->variant_price;

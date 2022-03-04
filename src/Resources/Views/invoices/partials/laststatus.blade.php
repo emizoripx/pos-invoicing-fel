@@ -3,5 +3,5 @@ $badgeTypes=['badge-primary','badge-primary','badge-success','badge-success','ba
 $tipoEstado = $invoice->tipoEmision == 'En Linea' ? 2:1;
 ?>
 @if($invoice->tipoEmision)
-    <span class="badge {{ $badgeTypes[$tipoEstado] }} badge-pill">{{ __($invoice->tipoEmision) }}</span>
+    <span class="badge {{ $badgeTypes[$tipoEstado] }} badge-pill">{{ __($invoice->estado) }}</span>
 @endif  

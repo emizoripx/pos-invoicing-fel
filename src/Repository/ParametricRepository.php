@@ -2,6 +2,7 @@
 
 namespace EmizorIpx\PosInvoicingFel\Repository;
 
+use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Services\Credentials\CredentialsService;
@@ -18,17 +19,33 @@ class ParametricRepository {
         return $parametrics;
 
     }
-    public function getPluck($type){
+    public function getPluck($type, $restorant_id = null){
 
-        $parametrics = \DB::table(Parametrics::getTableName($type))->where('is_active', true)->pluck('descripcion', 'codigo')->all();
+        if($type == Parametrics::SIN_PRODUCTS){
+            
+            $parametrics = \DB::table(Parametrics::getTableName($type))->where('restorant_id', $restorant_id)->pluck('descripcion', 'codigo')->all();
+
+        } else {
+
+            $parametrics = \DB::table(Parametrics::getTableName($type))->where('is_active', true)->pluck('descripcion', 'codigo')->all();
+            
+        }
 
         return $parametrics;
 
     }
 
-    public function getUpdatedAt( $parametric ){
+    public function getUpdatedAt( $parametric, $restorant_id = null ){
 
-        $updated_at = \DB::table(Parametrics::getTableName($parametric))->orderBy('updated_at', 'desc')->pluck('updated_at')->first();
+        if($parametric == Parametrics::SIN_PRODUCTS){
+            
+            $updated_at = \DB::table(Parametrics::getTableName($parametric))->where('restorant_id', $restorant_id )->orderBy('updated_at', 'desc')->pluck('updated_at')->first();
+
+        } else{
+
+            $updated_at = \DB::table(Parametrics::getTableName($parametric))->orderBy('updated_at', 'desc')->pluck('updated_at')->first();
+        }
+
 
         \Log::debug("Get updated_at: ". $updated_at);
         \Log::debug("Get updated_at: ". strtotime($updated_at));
@@ -37,7 +54,7 @@ class ParametricRepository {
 
     }
 
-    public function saveParametrics($type, $data){
+    public function saveParametrics($type, $data, $restorant_id = null){
 
         // $local_parametrics = \DB::table(Parametrics::getTableName($type))->get();
 
@@ -54,7 +71,20 @@ class ParametricRepository {
         \Log::debug("Prepared Data >>>>>>>>>>>> ". json_encode($data_prepared));
         \Log::debug($model);
 
-        $model::upsert($data_prepared, ['codigo'], ['descripcion']);
+        if($type == Parametrics::SIN_PRODUCTS){
+            \Log::debug("Update SIN PRODUCTS >>>>>>>>>>>>>> ");
+            $data_concatenated = collect($data_prepared)->map( function ($item) use ($restorant_id) {
+
+                return collect($item)->merge(['restorant_id' => $restorant_id])->all();
+
+            })->all();
+            \Log::debug("Products contateneted >>>>>>>>>>>>>> " . json_encode($data_concatenated) );
+            $model::upsert($data_concatenated, ['codigo', 'codigoActividad', 'restorant_id'], ['descripcion']);
+        } else {
+
+            $model::upsert($data_prepared, ['codigo'], ['descripcion']);
+        }
+
 
 
     }
@@ -98,6 +128,30 @@ class ParametricRepository {
 
             $this->saveParametrics($type, $response);
         }
+
+
+    }
+
+    public function syncSinProducts( $restorant_id ) {
+
+        $credentials = FelToken::where('restorant_id', $restorant_id)->first();
+
+        if( empty($credentials) ){
+            throw new PosInvoicingException('Credenciales no configurados para la compañía');
+        }
+
+        $parametric_service = new ParametricsService( $credentials->host );
+
+        $parametric_service->setAccessToken($credentials->access_token);
+
+
+        $updated_at = $this->getUpdatedAt(Parametrics::SIN_PRODUCTS, $restorant_id);
+
+        $parametric_service->setTypeParametric( Parametrics::getTypeUri(Parametrics::SIN_PRODUCTS) );
+
+        $response = $parametric_service->get( $updated_at );
+
+        $this->saveParametrics(Parametrics::SIN_PRODUCTS, $response, $restorant_id);
 
 
     }

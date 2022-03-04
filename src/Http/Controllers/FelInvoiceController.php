@@ -48,7 +48,7 @@ class FelInvoiceController extends Controller
         //     $driversData[$driver->id] = $driver->name;
         // }
 
-        $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->orderBy('created_at', 'desc');
+        $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->whereNotNull('cuf')->orderBy('created_at', 'desc');
 
         //Get client's orders
         // if (auth()->user()->hasRole('owner')) {
