@@ -64,7 +64,7 @@ class FelInvoiceRepository {
         $array_detail = [];
 
         $new = new stdClass();
-        $new->codigoProducto = 'DEL-2122331';
+        $new->codigoProducto = getenv('PRODUCT_CODE_DELIVERY');
         $new->descripcion = 'Delivery';
         $new->cantidad = 1;
         $new->precioUnitario = $price;
