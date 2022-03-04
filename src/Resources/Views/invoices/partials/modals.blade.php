@@ -296,32 +296,24 @@
     <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title" id="modal-title-default">{{ __('POS Invoice')}}</h6>
+                <h6 class="modal-title" id="modal-title-default">{{ __('Anulación')}}</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
                 {{-- EPOS-INSERT --}}
-                <div class="row">
-                    <form role="form text-left">
-                        <label>*{{ __('Razón Social')}}</label>
-                        <div class="input-group mb-3">
-                            <input type="text" id="name_client" class="form-control" placeholder="Nombre / Razón Social" aria-label="o" required autofocus>
-                        </div>
-                    </form>
-                </div>
                 {{-- EPOS-END --}}
                 <div class="row">
                     <div class="col">
                         <form role="form text-left">
                             {{-- EPOS-INSERT --}}
-                            <label>{{ __('Tipo Documento') }}</label>
+                            <label>{{ __('Motivo de Anulación') }}</label>
                             <div class="input-group mb-3">
-                                <select @change="onChange($event)" class="form-control noselecttwo" id="documentType" >
-                                    <option value="5">{{ __('NIT') }}</option>
-                                    <option value="1">{{ __('CI') }}</option>
-                                </select>
+                            <select class='form-control noselecttwo' v-model='motivoAnulacion' @change="onChange($event)"  id="codeRevocationReason" >
+                                <option value='0' >Selecccione un motivo de anulación</option>
+                                <option v-for='motivoanulacion in motivosAnulacion' :value='motivoanulacion.codigo'>@{{ motivoanulacion.descripcion }}</option>
+                             </select>
                             </div>
                             {{-- EPOS-END --}}
                         </form>
@@ -331,9 +323,9 @@
             </div>
             <div class="modal-footer" >
 
-                <i id="indicator" style="display: none" class="fas fa-spinner fa-spin"></i>
+                <i id="indicatoranular" style="display: none" class="fas fa-spinner fa-spin"></i>
                 <button data-bs-dismiss="modal" class="btn">{{ __('Close') }}</button>
-                <button type="button" id="submitInvoicePOS" onclick="submitOrderPOS('invoice')" class="btn bg-gradient-primary">
+                <button id="botonanular" type="button" v-on:click="anular" class="btn bg-gradient-primary">
                     <span class="btn-inner--text text-secondary">Anular Factura</span>
                     <span class="btn-inner--icon text-secondary"><i class="ni ni-curved-next"></i></span>
                 </button>
