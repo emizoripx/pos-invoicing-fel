@@ -37,7 +37,7 @@ class CreateFelInvoice
         $this->fel_invoice_repo->prepareDetailsData($event->order->items);
 
         if( $event->order->delivery_price > 0 ){
-            $this->fel_invoice_repo->addDeliveryItem($event->order->delivery_price);
+            $this->fel_invoice_repo->addDeliveryItem($event->order->delivery_price, $event->order->items[0]);
         }
         
         $this->fel_invoice_repo->create();
