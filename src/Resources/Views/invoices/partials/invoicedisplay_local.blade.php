@@ -18,7 +18,7 @@
 <tr>
     <td>
         
-        <a class="btn badge badge-success badge-pill" onclick="verFactura({{ $invoice->id }})">#{{ $invoice->id }}</a>
+        <a class="btn badge badge-success badge-pill" onclick="verFactura({{ $invoice->order_id }})">#{{ $invoice->id }}</a>
     </td>
     @hasrole('admin|driver')
     <th scope="row">
