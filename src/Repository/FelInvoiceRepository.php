@@ -21,7 +21,8 @@ class FelInvoiceRepository {
             'codigoTipoDocumentoIdentidad' => isset($fel_data['codigoTipoDocumentoIdentidad']) ? $fel_data['codigoTipoDocumentoIdentidad'] : 1 ,
             'numeroDocumento' => $fel_data['numeroDocumento'],
             'codigoMetodoPago' => isset($fel_data['codigoMetodoPago']) ? $fel_data['codigoMetodoPago'] : 1,
-            'complemento' => isset($fel_data['complemento']) ? $fel_data['complemento'] : null,
+            // 'complemento' => isset($fel_data['complemento']) ? $fel_data['complemento'] : null,
+            'complemento' => null,
             'usuario' => $order->employee_id,
             'montoTotal' => $order->order_price,
             'codigoCliente' => '',
@@ -37,6 +38,8 @@ class FelInvoiceRepository {
         foreach ($items as $item) {
             $new = new stdClass();
             $new->codigoProducto = is_null($item->codigoProducto) ? $item->fel_product->codigoProducto :  $item->codigoProducto  ;
+            $new->codigoProductoSin =  $item->fel_product->codigoProductoSin;
+            $new->codigoActividadEconomica =  $item->fel_product->codigoActividadEconomica;
             $new->descripcion = $item->name;
             $new->cantidad = $item->pivot->qty;
             $new->precioUnitario = $item->pivot->variant_price;
@@ -62,7 +65,7 @@ class FelInvoiceRepository {
         $array_detail = [];
 
         $new = new stdClass();
-        $new->codigoProducto = 'DEL-2122331';
+        $new->codigoProducto = getenv('PRODUCT_CODE_DELIVERY');
         $new->descripcion = 'Delivery';
         $new->cantidad = 1;
         $new->precioUnitario = $price;

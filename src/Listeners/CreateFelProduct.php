@@ -39,11 +39,16 @@ class CreateFelProduct
         // $event->item->codigoProducto = strtoupper($str) . '-'. strval($time);
         // $event->item->save();
 
+        $codigo_actividad = \DB::table('fel_sin_products')->where('restorant_id', $event->item->category->restorant_id)->where('codigo', $event->codigoProductoSin)->pluck('codigoActividad')->first();
+        \Log::debug("Codigo Actividad Economica >>>>>> " . $codigo_actividad);
+
         $new = new FelProduct();
         $new->restorant_id = $event->item->category->restorant_id;
         $new->item_id = $event->item->id;
         $new->codigoProducto = strtoupper($str) . '-'. strval($time);
         $new->codigoUnidad = $event->codigoUnidad;
+        $new->codigoProductoSin = $event->codigoProductoSin;
+        $new->codigoActividadEconomica = $codigo_actividad;
 
         $new->save();
 

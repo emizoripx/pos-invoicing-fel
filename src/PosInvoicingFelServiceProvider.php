@@ -2,7 +2,9 @@
 
 namespace EmizorIpx\PosInvoicingFel;
 
+use EmizorIpx\PosInvoicingFel\Console\Commands\HomologateDemoProducts;
 use EmizorIpx\PosInvoicingFel\Console\Commands\SyncParametrics;
+use EmizorIpx\PosInvoicingFel\Console\Commands\SyncSinProducts;
 use EmizorIpx\PosInvoicingFel\Providers\PosInvoicingFelEventServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -54,7 +56,9 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                SyncParametrics::class
+                SyncParametrics::class,
+                SyncSinProducts::class,
+                HomologateDemoProducts::class,
                 
             ]);
         }

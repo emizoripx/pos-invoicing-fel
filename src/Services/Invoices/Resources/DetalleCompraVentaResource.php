@@ -16,6 +16,8 @@ class DetalleCompraVentaResource extends JsonResource
     {
         return [
             "codigoProducto" => $this->resource['codigoProducto'],
+            "codigoProductoSin" => $this->resource['codigoProductoSin'],
+            "codigoActividadSin" => $this->resource['codigoActividadEconomica'],
             "descripcion" => $this->resource['descripcion'],
             "cantidad" => $this->resource['cantidad'],
             "precioUnitario" => $this->resource['precioUnitario'],

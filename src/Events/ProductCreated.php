@@ -18,15 +18,19 @@ class ProductCreated
 
     public $codigoUnidad;
 
+    public $codigoProductoSin;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct( Items $item, $codigoUnidad )
+    public function __construct( Items $item, $codigoUnidad, $codigoProductoSin )
     {
         $this->item = $item;
 
         $this->codigoUnidad = $codigoUnidad;
+
+        $this->codigoProductoSin = $codigoProductoSin;
     }
 }
