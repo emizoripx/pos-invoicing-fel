@@ -136,4 +136,8 @@ class FelInvoiceRepository {
 
     }
 
+    public function getFelInvoiceDetails(){
+        return $this->data['detalles'];
+    }
+
 }

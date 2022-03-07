@@ -46,6 +46,7 @@ class UpdateFelProduct
 
         if(empty($new)){
             \Log::debug("Event Update FEL Product >>>>>>>>>>>>>>>>>>> No se encontro el Product #" . $event->item->id);
+            return;
         }
 
         $old_cod = substr($event->item->fel_product->codigoProducto, 0, 3);
