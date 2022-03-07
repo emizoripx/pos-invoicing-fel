@@ -9,7 +9,7 @@ function anularFactura(idOrder,opcion){
   console.log('anular :: idFacrtura ', idOrder, ' opcion  ', opcion);
   $('#indicatoranular').show();
   $('#botonanular').hide();
-  axios.delete(`/posfel/v1/revocate/${idOrder}`, {}).then(function (response) {
+  axios.delete(`/posfel/v1/revocate/${idOrder}?codigo_motivo_anulacion=${opcion}`, {}).then(function (response) {
     
     
      $('#botonanular').show();

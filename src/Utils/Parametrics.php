@@ -5,6 +5,7 @@ namespace EmizorIpx\PosInvoicingFel\Utils;
 use EmizorIpx\PosInvoicingFel\Models\FelIdentityDocumentType;
 use EmizorIpx\PosInvoicingFel\Models\FelPaymentMethod;
 use EmizorIpx\PosInvoicingFel\Models\FelRevocationReason;
+use EmizorIpx\PosInvoicingFel\Models\FelSinProduct;
 use EmizorIpx\PosInvoicingFel\Models\FelUnit;
 
 class Parametrics {
@@ -13,6 +14,7 @@ class Parametrics {
     const UNIDADES = 'units';
     const METODO_PAGOS = 'payments-methods';
     const TIPOS_DOCUMENTO_IDENTIDAD = 'identity-document-types';
+    const SIN_PRODUCTS = 'sin-products';
 
 
     public static function getAll(){
@@ -41,6 +43,9 @@ class Parametrics {
             case static::TIPOS_DOCUMENTO_IDENTIDAD:
                 return 'fel_identity_document_types';
                 break;
+            case static::SIN_PRODUCTS:
+                return 'fel_sin_products';
+                break;
             
         }
     }
@@ -59,6 +64,9 @@ class Parametrics {
                 break;
             case static::TIPOS_DOCUMENTO_IDENTIDAD:
                 return 'tipos-documento-de-identidad';
+                break;
+            case static::SIN_PRODUCTS:
+                return 'productos-sin';
                 break;
             
         }
@@ -79,6 +87,9 @@ class Parametrics {
                 break;
             case static::MOTIVOS_ANULACION:
                 return FelRevocationReason::class;
+                break;
+            case static::SIN_PRODUCTS:
+                return FelSinProduct::class;
                 break;
             
         }

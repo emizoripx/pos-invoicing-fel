@@ -32,7 +32,6 @@
   <!-- Font Awesome Icons -->
   <script src="{{ asset('vendor') }}/fa/fa.js" crossorigin="anonymous"></script>
   <link href="{{ asset('softd') }}/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- CSS Files -->
   
 
   <!-- Select2  -->
