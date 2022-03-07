@@ -64,8 +64,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="modal-title-new-item">{{ __('Your overall rating') }}</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                <button type="button" class="btn-close bg-warning" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="modal-body p-0">
@@ -167,7 +167,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title" id="modal-title-default">{{ __('POS Invoice')}}</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close btn" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="col">
                                     <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.nombreRazonSocial:"" }}</p>
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.numeroDocumento:"" }}</p>
+                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? (invoice.numeroDocumento + (invoice.complemento? invoice.complemento: "")):"" }}</p>
                                     <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.codigoCliente:"" }}</p>
                                     <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.fechaEmision:"" }}</p>
                                 </div>
@@ -284,7 +284,7 @@
     
                     <div class="modal-footer">
                         <button data-bs-dismiss="modal" class="btn bg-gradient-default">{{ __('Close') }}</button>
-                        <button id="printPosInvoiceView" class="btn bg-gradient-primary">{{ __('Print') }}</button>
+                        <button v-on:click="imprimirFactura()" class="btn bg-gradient-primary">{{ __('Print') }}</button>
                     </div>
                 </div>
             </div>
