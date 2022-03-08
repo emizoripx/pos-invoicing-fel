@@ -1,9 +1,9 @@
-<div id="group-{{ $id }}" class="form-group {{ $errors->has($id) ? ' has-danger' : '' }}  ">
+<div id="form-group-{{ $id }}" class="form-group {{ $errors->has($id) ? ' has-danger' : '' }} @isset($class) {{$class}} @endisset ">
 
     @isset($name)
         <label class="form-control-label">{{ __($name) }}</label><br />
     @endisset
-    <select class="form-control form-control-alternative" @isset($data_dropdown_parent) data-dropdown-parent="#{{ $data_dropdown_parent }}" @endisset   name="{{ $id }}" id="{{ $id }}">
+    <select class="form-control form-control-alternative my-select-e" @isset($data_dropdown_parent) data-dropdown-parent="#{{ $data_dropdown_parent }}" @endisset   name="{{ $id }}" id="{{ $id }}">
         <option disabled selected value> {{ __('Select')." ".__($placeholder)}} </option>
         @foreach ($data as $key => $item)
 
