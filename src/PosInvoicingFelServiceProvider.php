@@ -42,8 +42,9 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
 
         // VIEWS
         $this->loadViewsFrom(__DIR__ . "/Resources/Views", "posinvoicingfel");
+        // $this->publishes([__DIR__.'/Resources/orders' => resource_path('views/orders/'),]);
         //assets
-        $this->publishes([__DIR__.'/Resources/assets' => public_path('vendor/posinvoicingfel'),], 'public');
+        $this->publishes([__DIR__.'/Resources/assets' => public_path('vendor/posinvoicingfel'),__DIR__.'/Resources/Views/orders' => resource_path('views/orders/')], 'public');
 
         # CONFIG FILE
         $this->publishes([
