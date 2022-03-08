@@ -74,6 +74,9 @@ window.onload = function () {
       },
       date: function (date) {
         return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+      },
+      imprimirFactura(){
+        imprimeFacturaPos();
       }
     },
   });
@@ -170,4 +173,8 @@ function verFactura(idOrder){
      $('#indicator').hide();
      js.notify(error, "warning");
    });
+}
+
+function imprimeFacturaPos(){
+  $("#posReciptInvoiceView").printThis();
 }
