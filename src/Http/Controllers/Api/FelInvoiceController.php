@@ -79,7 +79,7 @@ class FelInvoiceController extends Controller
             $fel_invoice = $this->felinvoice_repo->update($fel_invoice);
             \Log::debug("TIME OF UPDATE DATA >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initUpdate) );
 
-            GetInvoiceStatus::dispatch($fel_invoice, ActionTypes::EMIT)->delay( now()->addSeconds(10) );
+            GetInvoiceStatus::dispatch($fel_invoice, ActionTypes::EMIT)->delay( now()->addSeconds(5) );
 
             \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
             return response()->json([
@@ -172,7 +172,7 @@ class FelInvoiceController extends Controller
 
             $invoice_service->revocate();
 
-            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(10) );
+            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(5) );
 
             return response()->json([
                 'status' => true,

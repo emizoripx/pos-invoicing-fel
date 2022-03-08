@@ -17,6 +17,6 @@ class FelInvoice extends Model
     ];
 
     public function setCodigoClienteAttribute($value){
-        $this->attributes['codigoCliente'] = 'COD-2';
+        $this->attributes['codigoCliente'] = 'COD-' . $this->numeroDocumento ;
     }
 }
