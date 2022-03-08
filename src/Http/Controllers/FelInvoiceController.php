@@ -6,6 +6,7 @@ use App\Exports\OrdersExport;
 use App\Restorant;
 use App\User;
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
+use EmizorIpx\PosInvoicingFel\Exports\FelInvoicesExport;
 use EmizorIpx\PosInvoicingFel\Jobs\GetInvoiceStatus;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
@@ -79,40 +80,31 @@ class FelInvoiceController extends Controller
 
 
         //With downloaod
-        // if (isset($_GET['report'])) {
-        //     $items = [];
-        //     foreach ($invoices->get() as $key => $order) {
-        //         $item = [
-        //             'order_id'=>$order->id,
-        //             'restaurant_name'=>$order->restorant->name,
-        //             'restaurant_id'=>$order->restorant_id,
-        //             'created'=>$order->created_at,
-        //             'last_status'=>$order->status->pluck('alias')->last(),
-        //             'client_name'=>$order->client ? $order->client->name : '',
-        //             'client_id'=>$order->client ? $order->client_id : null,
-        //             'table_name'=>$order->table ? $order->table->name : '',
-        //             'table_id'=>$order->table ? $order->table_id : null,
-        //             'area_name'=>$order->table && $order->table->restoarea ? $order->table->restoarea->name : '',
-        //             'area_id'=>$order->table && $order->table->restoarea ? $order->table->restoarea->id : null,
-        //             'address'=>$order->address ? $order->address->address : '',
-        //             'address_id'=>$order->address_id,
-        //             'driver_name'=>$order->driver ? $order->driver->name : '',
-        //             'driver_id'=>$order->driver_id,
-        //             'order_value'=>$order->order_price_with_discount,
-        //             'order_delivery'=>$order->delivery_price,
-        //             'order_total'=>$order->delivery_price + $order->order_price_with_discount,
-        //             'payment_method'=>$order->payment_method,
-        //             'srtipe_payment_id'=>$order->srtipe_payment_id,
-        //             'order_fee'=>$order->fee_value,
-        //             'restaurant_fee'=>$order->fee,
-        //             'restaurant_static_fee'=>$order->static_fee,
-        //             'vat'=>$order->vatvalue,
-        //           ];
-        //         array_push($items, $item);
-        //     }
+        if (isset($_GET['report'])) {
+            $items = [];
+            foreach ($invoices->get() as $key => $invoice) {
+                $item = [
+                    'numero_factura'=>$invoice->numeroFactura,
+                    'numero_orden'=>$invoice->order_id,
+                    'cuf'=>$invoice->cuf,
+                    'fecha_emision'=>$invoice->fechaEmision,
+                    'nombre_razon_social'=>$invoice->nombreRazonSocial,
+                    'numero_documento'=>$invoice->numeroDocumento,
+                    'complemento'=>$invoice->complemento,
+                    'codigo_cliente'=>$invoice->codigoCliente,
+                    'monto_total'=> (float) $invoice->montoTotal,
+                    'monto_total_sujeto_iva'=> (float) $invoice->montoTotalSujetoIva,
+                    'estado'=>$invoice->estado,
+                    'codigo_estado'=>$invoice->codigoEstado,
+                    'tipo_emision'=>$invoice->tipoEmision,
+                    'url_sin'=>$invoice->url_sin,
+                    'creado'=>$invoice->created_at,
+                  ];
+                array_push($items, $item);
+            }
 
-        //     return Excel::download(new OrdersExport($items), 'orders_'.time().'.xlsx');
-        // }
+            return Excel::download(new FelInvoicesExport($items), 'facturas_'.time().'.xlsx');
+        }
 
         $invoices = $invoices->paginate(10);
 

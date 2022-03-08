@@ -30,7 +30,7 @@ class GetInvoiceStatus implements ShouldQueue
 
     protected $action;
 
-    protected $delay_times = [15, 30, 60, 120, 300, 600];
+    protected $delay_times = [10, 20, 30, 60, 120, 300];
     protected $delay_offline = [1800, 3600, 10800, 18000, 36000,86400];
 
     public $tries = 6;
