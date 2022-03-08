@@ -30,3 +30,6 @@ for development in a local environment
 ```
     docker-compose exec app php artisan optimize
 ```
+```
+    docker-compose exec app php artisan vendor:publish --tag=public --force
+```
