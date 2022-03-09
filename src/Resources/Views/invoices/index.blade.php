@@ -1,5 +1,5 @@
 @extends('layouts.app', ['title' => __('Facturas')])
-@extends('posinvoicingfel::layouts.master')
+
 @section('admin_title')
     {{__('Facturas')}}
 @endsection
@@ -19,4 +19,3 @@
         @include('posinvoicingfel::invoices.partials.modals')
     </div>
 @endsection
-

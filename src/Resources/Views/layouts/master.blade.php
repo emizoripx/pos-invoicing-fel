@@ -1,400 +1,189 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('softd') }}/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="{{ asset('softd') }}/img/favicon.png">
-  <title>    
-  </title>
-  <!--     Fonts and icons     -->
-  <link href="{{ asset('css') }}/gfonts.css" rel="stylesheet">
-
-  <!-- Nucleo Icons -->
-  <link href="{{ asset('softd') }}/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="{{ asset('softd') }}/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- Font Awesome Icons -->
-  <script src="{{ asset('vendor') }}/fa/fa.js" crossorigin="anonymous"></script>
-  <link href="{{ asset('softd') }}/css/nucleo-svg.css" rel="stylesheet" />
-  
-
-  <!-- Select2  -->
-  <link type="text/css" href="{{ asset('custom') }}/css/select2.min.css" rel="stylesheet">
-
-  <!--Custom CSS -->
-  <link type="text/css" href="{{ asset('custom') }}/css/custom.css" rel="stylesheet">
-
-  <link type="text/css" href="{{ asset('custom') }}/css/pos.css" rel="stylesheet">
-  
-  @laravelPWA
-
-</head>
-
-<body class="g-sidenav-show bg-gray-100">
-  <div class="main-content position-relative bg-gray-100">
-    
-  </div>
-  <!--   Core JS Files   -->
-  <script src="{{ asset('softd') }}/js/core/popper.min.js"></script>
-  <script src="{{ asset('softd') }}/js/core/bootstrap.min.js"></script>
-  <script src="{{ asset('softd') }}/js/plugins/smooth-scrollbar.min.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="{{ asset('softd') }}/js/soft-ui-dashboard.min.js?v=1.0.1"></script>
-
-  <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
-
-  <!-- Import Vue -->
-  <script src="{{ asset('vendor') }}/vue/vue.js"></script>
-  <!-- Import AXIOS --->
-  <script src="{{ asset('vendor') }}/axios/axios.min.js"></script>
-
-  <!-- Import Interact --->
-  <script src="{{ asset('vendor') }}/interact/interact.min.js"></script>
-  
-  <!-- Import Select2 --->
-  <script src="{{ asset('vendor') }}/select2/select2.min.js"></script>
-
-  <!-- printThis -->
-  <script src="{{ asset('vendor') }}/printthis/printThis.js"></script> 
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
 
-   <!-- Add to Cart   -->
-   <script>
-      var LOCALE="<?php echo  App::getLocale() ?>";
-      var CASHIER_CURRENCY = "<?php echo  config('settings.cashier_currency') ?>";
-      var USER_ID = '{{  auth()->user()&&auth()->user()?auth()->user()->id:"" }}';
-      var PUSHER_APP_KEY = "{{ config('broadcasting.connections.pusher.key') }}";
-      var PUSHER_APP_CLUSTER = "{{ config('broadcasting.connections.pusher.options.cluster') }}";
-      var CASHIER_CURRENCY = "<?php echo  config('settings.cashier_currency') ?>";
-      var LOCALE="<?php echo  App::getLocale() ?>";
-      var SELECT_OR_ENTER_STRING="{{ __('Select, or enter keywords to search items') }}";
-    
-      var IS_POS=true;
-      var CURRENT_TABLE_ID=null;
-      var EXPEDITION=3;
-      var CURRENT_TABLE_NAME=null;
-      var CURRENT_RECEIPT_NUMBER="";
-      var SHOWN_NOW="floor"; //floor,orders,order
-      
+        @yield('title')
+        <title>{{ config('app.name', 'FoodTiger') }}</title>
 
-      // "Global" flag to indicate whether the select2 control is oedropped down).
-      var _selectIsOpen = false;
+        <!-- Favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
-      
-   </script>
-   <script src="{{ asset('custom') }}/js/cartPOSFunctions.js"></script>
-   
-   <!-- Cart custom sidemenu -->
-   <script src="{{ asset('custom') }}/js/cartSideMenu.js"></script>
-
-   <!-- All in one -->
-   <script src="{{ asset('custom') }}/js/js.js?id={{ config('config.version')}}"></script>
-
-   <!-- Notify JS -->
-   <script src="{{ asset('custom') }}/js/notify.min.js"></script>
-   <script src="{{ asset('vendor') }}/posinvoicingfel/js/invoicemodal.js"></script>
-  
-  @stack('js')
-  @yield('js')
-
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-
-  </script>
-
-
-  <script type="text/javascript">
-
-      $(function() {
-
-        $('#printPos').on("click", function () {
-          $("#posRecipt").printThis(); 
-        });
-        //FEL
-        $('#printPosInvoice').on("click", function () {
-          $("#posReciptInvoice").printThis(); 
-        });
-        //FEL
-         //FEL
-        $('#printPosInvoiceView').on("click", function () {
-            $("#posReciptInvoiceView").printThis(); 
-        });
-      //FEL
-        //INterval getting orders
-
-
-        // $('#orderTo').select2({
-        //     dropdownParent: $('#modalSwitchTables')
-        // });
-        // $('#orderFrom').select2({
-        //     dropdownParent: $('#modalSwitchTables')
-        // });
-        // $('#swithTableButton').on('click',function(e){
-        //   $('#modalSwitchTables').modal('hide');
-        //   doMoveOrder($('#orderFrom').val(),$('#orderTo').val());
-        // })
-
-      
-        // $('.select2init').select2({
-        //   id:"-1",
-        //   placeholder:"Search ..."
-        // });
-
-        // $('select').on('change', function() {
-        //   if(this.id=="itemsSelect"&&this.value!=""){
-        //     setCurrentItem( this.value );
-        //   }
-          
-        // });
-
-
-        // Initialize the select2.
-      const $mySelect = $("#itemsSelect");
-      $mySelect.select2({
-        placeholder: { 
-          id: "",
-          text: SELECT_OR_ENTER_STRING
-        }, 
-        selectOnClose: true,
-      });
-
-      $mySelect
-        .on("select2:open", event => {
-          _selectIsOpen = true;
-        })
-        .on("select2:close", event => {
-          _selectIsOpen = false;
-        })
-        .on("select2:select", (event) => {});
-
-        $("body")
-        .on("select2:opening", event => {})
+        <!-- Fonts -->
+        <link href="{{ asset('css') }}/gfonts.css" rel="stylesheet">
         
-        .on("keypress", event => {
-          if ($(event.target).is('input, textarea, select')) return;
-          if (_selectIsOpen) {
-            return;
-          }
-          if(SHOWN_NOW!="order"){
-            //But first check if in order
-            return;
-          }
+        <!-- Icons -->
+        <link href="{{ asset('argon') }}/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+        <link href="{{ asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+        <!-- Argon CSS -->
+        <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
+        <!-- Argon CSS -->
+        <link type="text/css" href="{{ asset('custom') }}/css/custom.css" rel="stylesheet">
+        <!-- Select2 -->
+        <link type="text/css" href="{{ asset('custom') }}/css/select2.min.css" rel="stylesheet">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="{{ asset('vendor') }}/jasny/css/jasny-bootstrap.min.css">
+        <!-- Flatpickr datepicker -->
+        <link rel="stylesheet" href="{{ asset('vendor') }}/flatpickr/flatpickr.min.css">
+
+         <!-- Font Awesome Icons -->
+        <link href="{{ asset('argonfront') }}/css/font-awesome.css" rel="stylesheet" />
+
+        <!-- Lottie -->
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
 
-          if (event.keyCode === 13) {
-              if($('#addToCart1').is(":visible")) {
-                addToCartVUE();
-              }
-              return;
-            }
-          const charCode = event.which;
-          if (
-            !(event.altKey || event.ctrlKey || event.metaKey) &&
-            ((charCode >= 48 && charCode <= 57) ||
-              (charCode >= 65 && charCode <= 90) ||
-              (charCode >= 97 && charCode <= 122))
-          ) {
-            $mySelect.select2("open");
-            $("input.select2-search__field")
-              .eq(0)
-              .val(String.fromCharCode(charCode));
-          }
-        });
+        <!-- Range datepicker -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendor') }}/daterangepicker/daterangepicker.css" />
+
+        @yield('head')
+        @laravelPWA
+        @include('layouts.rtl')
+
+        <!-- Custom CSS defined by admin -->
+        <link type="text/css" href="{{ asset('byadmin') }}/back.css" rel="stylesheet">
 
 
-        //Get all order - vue
-        getAllOrders();
-
-        $('#orderList .orderRow').hover(function() {
-                  $(this).addClass('hoverTableRow');
-            }, function() {
-                $(this).removeClass('hoverTableRow');
-        });
-
-        $('#orderList tr').on( "click", function() {
-          var id=$( this ).attr('id');
-        });
-      })
-
-    
-  
-
-    function showOrders() {
-     
-      $("#floorTabs").hide();
-      $("#floorAreas").hide();
-      $("#orders").show();
-      $("#orderDetails").hide();
-      SHOWN_NOW="orders";
-    }
-
-    function showOrderDetail(id) {
-     
-     $("#floorTabs").hide();
-     $("#floorAreas").hide();
-     $("#orders").hide();
-     $("#orderDetails").show();
-
-     //Set the name of the table
-     $("#tableName").html(CURRENT_TABLE_NAME);
-     $("#orderNumber").html(CURRENT_RECEIPT_NUMBER);
-
-     EXPEDITION==1?$('#client_address_fields').show():$('#client_address_fields').hide(); 
-     EXPEDITION==3?$('#expedition').hide():$('#expedition').show();
 
 
-     SHOWN_NOW="order";
+    </head>
+    <body class="{{ $class ?? '' }}">
+        @auth()
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+            @if(\Request::route()->getName() != "order.success"&&(\Request::route()->getName() != "selectpay"))
+                @include('layouts.navbars.sidebar')
+            @endif
+        @endauth
 
-     clearDeduct();
-     $('#coupon_code').html("");
-   }
+        <div class="main-content">
+            @include('layouts.navbars.navbar')
+            @yield('content')
+        </div>
 
+        @guest()
+            @include('layouts.footers.guest')
+        @endguest
 
-   function moveOrder(){
-    //Find Occupied
-    //Find Free tables
-    var occupiedList={};
-    var freeList={};
-    $('.resize-drag').each(function(i, obj) {
-        var id=obj.id.replace("drag-","");
-        if($("#"+obj.id).hasClass('occcupied')){
-          occupiedList[id]=floorPlan[id];
-        }else{
-          freeList[id]=floorPlan[id];
-        }
-    });
-    
-    
-    //If occupied or free is empty, show a message
-    if(Object.keys(occupiedList).length==0){
-      js.notify("There are no active orders on tables", "warning");
-    }else if(Object.keys(freeList).length==0){
-      js.notify("There are no free tables", "warning");
-    }else{
+        <!-- Commented because navtabs includes same script -->
+        <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
 
-      //Set selects
-      $('#orderFrom').empty();
-      $('#orderTo').empty();
-      Object.keys(occupiedList).map((key)=>{
-        var newOption = new Option(occupiedList[key], key, false, false);
-        $('#orderFrom').append(newOption);//.trigger('change');
-      })
-      Object.keys(freeList).map((key)=>{
-        var newOption = new Option(freeList[key], key, false, false);
-        $('#orderTo').append(newOption);//.trigger('change');
-      })
-      $('#orderFrom').trigger("change");
-      $('#orderTo').trigger("change");
-     
+        <script src="{{ asset('argonfront') }}/js/core/popper.min.js" type="text/javascript"></script>
+        <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-      //Switch Tables modal
-      $('#modalSwitchTables').modal('show');
-    }
+        @yield('topjs')
 
-    
+        <script>
+            var t="<?php echo 'translations'.App::getLocale() ?>";
+           window.translations = {!! Cache::get('translations'.App::getLocale(),"[]") !!};
+           
+           
+        </script>
 
-    
+        <!-- Navtabs -->
+        <script src="{{ asset('argonfront') }}/js/core/jquery.min.js" type="text/javascript"></script>
 
 
-    //Open the modal
-   }
+        <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-   function createDeliveryOrder() {
-      CURRENT_TABLE_ID= 1+""+(new Date().getTime()+"").substring(6)
-      CURRENT_TABLE_NAME="New delivery order";
-      EXPEDITION=1;
-      expedition.config={};
-      getCartContentAndTotalPrice();
-      showOrderDetail(CURRENT_TABLE_ID);
-   }
+        <!-- Nouslider -->
+        <script src="{{ asset('argon') }}/vendor/nouislider/distribute/nouislider.min.js" type="text/javascript"></script>
 
-   function createPickupOrder() { 
-      CURRENT_TABLE_ID= (new Date().getTime()+"").substring(6)
-      CURRENT_TABLE_NAME="New takeaway order";
-      EXPEDITION=2;
-      expedition.config={};
-      getCartContentAndTotalPrice();
-      showOrderDetail(CURRENT_TABLE_ID);
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="{{ asset('vendor') }}/jasny/js/jasny-bootstrap.min.js"></script>
+        <!-- Custom js -->
+        <script src="{{ asset('custom') }}/js/orders.js"></script>
+         <!-- Custom js -->
+        <script src="{{ asset('custom') }}/js/mresto.js"></script>
+        <!-- AJAX -->
 
-    }
+        <!-- SELECT2 -->
+        <script src="{{ asset('custom') }}/js/select2.js"></script>
+        <script src="{{ asset('vendor') }}/select2/select2.min.js"></script>
+
+        <!-- DATE RANGE PICKER -->
+        <script type="text/javascript" src="{{ asset('vendor') }}/moment/moment.min.js"></script>
+        <script type="text/javascript" src="{{ asset('vendor') }}/daterangepicker/daterangepicker.min.js"></script>
+
+        <!-- All in one -->
+        <script src="{{ asset('custom') }}/js/js.js?id={{ config('config.version')}}"></script>
+
+        <!-- Argon JS -->
+        <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
+
+         <!-- Import Vue -->
+        <script src="{{ asset('vendor') }}/vue/vue.js"></script>
+
+        <!-- Import AXIOS --->
+        <script src="{{ asset('vendor') }}/axios/axios.min.js"></script>
+
+        <!-- Flatpickr datepicker -->
+        <script src="{{ asset('vendor') }}/flatpickr/flatpickr.js"></script>
+
+        <!-- Notify JS -->
+        <script src="{{ asset('custom') }}/js/notify.min.js"></script>
+
+         <!-- Cart custom sidemenu -->
+        <script src="{{ asset('custom') }}/js/cartSideMenu.js"></script>
 
 
-    function showFloor() {
+        <script>
+            var ONESIGNAL_APP_ID = "{{ config('settings.onesignal_app_id') }}";
+            var USER_ID = '{{  auth()->user()&&auth()->user()?auth()->user()->id:"" }}';
+            var PUSHER_APP_KEY = "{{ config('broadcasting.connections.pusher.key') }}";
+            var PUSHER_APP_CLUSTER = "{{ config('broadcasting.connections.pusher.options.cluster') }}";
+        </script>
+        @if (auth()->user()!=null&&auth()->user()->hasRole('staff'))
+            <script>
+                //When staff, use the owner
+                USER_ID = '{{  auth()->user()->restaurant->user_id }}';
+            </script>
+        @endif
+       
 
-      $("#floorTabs").show();
-      $("#floorAreas").show();
-      $("#orders").hide();
-      $("#orderDetails").hide();
-      SHOWN_NOW="floor";
-    }
+        <!-- OneSignal -->
+        @if(strlen( config('settings.onesignal_app_id'))>4)
+            <script src="{{ asset('vendor') }}/OneSignalSDK/OneSignalSDK.js" async=""></script>
+            <script src="{{ asset('custom') }}/js/onesignal.js"></script>
+        @endif
 
-    function openTable(id,receipt_number) {
+        @stack('js')
+        @yield('js')
 
-      CURRENT_TABLE_ID=id;
-      CURRENT_RECEIPT_NUMBER=receipt_number;
-      idLength=(id+"").length;
-      if(idLength<6){
-        CURRENT_TABLE_NAME=floorPlan[id];
-        EXPEDITION=3;
-      }else if(idLength==7){
-        CURRENT_TABLE_NAME="Takeaway order";
-        EXPEDITION=2;
-      }else{
-        CURRENT_TABLE_NAME="Delivery order";
-        EXPEDITION=1;
-      }
-      
-      getCartContentAndTotalPrice();
-      showOrderDetail(id);
-    }
+        <script src="{{ asset('custom') }}/js/rmap.js"></script>
+        <!-- EMIZOR-INVOICE-INSERT -->
+        <script>
+            $('document').ready(function () {
+            $('.select2').addClass('form-control');
+            
+            $('.select2-selection').css('border', '0');
+            $('.select2-selection').css('margin-bottom', '10px');
+            $('.select2').css('padding-bottom', '35px');
+            $('.select2').css('width', '100%');
+            
+            $('.select2-selection__arrow').css('top', '10px');
+            $('.select2-selection__rendered').css('color', '#8898aa')
+            });
+        </script>
+        <!-- EMIZOR-INVOICE-END -->
 
-    function makeOcccupied(id){
-      $('#drag-'+id).addClass('occcupied');
-    }
+         <!-- Pusher -->
+         @if(strlen( config('broadcasting.connections.pusher.app_id'))>2)
+            <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+            <script src="{{ asset('custom') }}/js/pusher.js"></script>
+        @endif
 
-    function makeFree(){
-      $('.occcupied').removeClass('occcupied');
-    }
-  </script>
-
-  <script type="module">
-    interact('.resize-drag')
-    .on('tap', function (event) {
-
-      //The drag id
-      var dragid=event.currentTarget.id;
-      var id=dragid.replace('drag-',"");
-      openTable(id,"");
-      event.preventDefault()
-    });
-    </script>
-
-    
-     
-
-</body>
-
+        <!-- Custom JS defined by admin -->
+        <?php echo file_get_contents(base_path('public/byadmin/back.js')) ?>
+    </body>
 </html>

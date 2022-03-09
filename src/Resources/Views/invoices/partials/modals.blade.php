@@ -283,8 +283,8 @@
     
     
                 <div class="modal-footer">
-                    <button data-bs-dismiss="modal" class="btn bg-gradient-default">{{ __('Close') }}</button>
-                    <button id="printPosInvoiceView" v-on:click="imprimirFactura" class="btn bg-gradient-primary">{{ __('Print') }}</button>
+                    <button data-bs-dismiss="modal" class="btn">{{ __('Close') }}</button>
+                    <button id="printPosInvoiceView" v-on:click="imprimirFactura" class="btn bg-primary">{{ __('Print') }}</button>
                 </div>
             </div>
         </div>
