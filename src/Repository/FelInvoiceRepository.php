@@ -27,6 +27,7 @@ class FelInvoiceRepository {
             'montoTotal' => $order->order_price,
             'codigoCliente' => '',
             'montoTotalSujetoIva' => $order->order_price,
+            'emailCliente' => isset($fel_data['email_client']) ? $fel_data['email_client'] : null ,
         ];
 
         $this->data = array_merge($this->data, $array_data);
