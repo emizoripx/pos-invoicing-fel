@@ -279,17 +279,17 @@
                             <img :src=" 'https://api.qrserver.com/v1/create-qr-code/?ecc=M&size=150x150&data='+(invoice? encodeURIComponent(invoice.url_sin):'')" class="image mr-3" alt=""/>
                         </div>
                     </center>  
-                    </div>
+                </div>
     
     
-                    <div class="modal-footer">
-                        <button data-bs-dismiss="modal" class="btn bg-gradient-default">{{ __('Close') }}</button>
-                        <button v-on:click="imprimirFactura()" class="btn bg-gradient-primary">{{ __('Print') }}</button>
-                    </div>
+                <div class="modal-footer">
+                    <button data-bs-dismiss="modal" class="btn bg-gradient-default">{{ __('Close') }}</button>
+                    <button id="printPosInvoiceView" v-on:click="imprimirFactura" class="btn bg-gradient-primary">{{ __('Print') }}</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 <!-- End POS invoice Modal -->
 <!--  anular invoice Modal -->
 <div class="modal  fade " id="modalAnularInvoiceView" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true" style="overflow: scroll;">
@@ -332,4 +332,5 @@
             </div>
         </div>
     </div>
+</div>
 <!-- End anular invoice Modal -->
