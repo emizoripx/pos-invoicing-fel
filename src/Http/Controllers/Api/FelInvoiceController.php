@@ -4,6 +4,7 @@ namespace EmizorIpx\PosInvoicingFel\Http\Controllers\Api;
 
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Jobs\GetInvoiceStatus;
+use EmizorIpx\PosInvoicingFel\Jobs\SendWhatsappMessage;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
@@ -81,6 +82,12 @@ class FelInvoiceController extends Controller
 
             GetInvoiceStatus::dispatch($fel_invoice, ActionTypes::EMIT)->delay( now()->addSeconds(5) );
 
+            $fel_restorant = auth()->user()->restorant->fel_restorant;
+            if( isset($fel_restorant) && $fel_restorant->enabled_whatsapp_send && $fel_restorant->enabled_whatsapp_auto_send && !is_null($fel_invoice->telefonoCliente)){
+
+                SendWhatsappMessage::dispatch($fel_invoice)->delay(now()->addSeconds(2));
+            }
+
             \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
             return response()->json([
                 'status' => true,
@@ -90,7 +97,7 @@ class FelInvoiceController extends Controller
 
         
         } catch(PosInvoicingException | Exception $ex){
-            \Log::debug("Error en la Emisión: " . $ex->getMessage());
+            \Log::debug("Error en la Emisión: " . $ex->getMessage() . "File: " . $ex->getFile() . " Line: ". $ex->getLine());
 
             return response()->json([
                 'status' => false,

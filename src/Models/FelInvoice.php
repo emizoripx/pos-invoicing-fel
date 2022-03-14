@@ -2,6 +2,7 @@
 
 namespace EmizorIpx\PosInvoicingFel\Models;
 
+use EmizorIpx\PosInvoicingFel\Services\Whatsapp\WhatsappService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,5 +19,9 @@ class FelInvoice extends Model
 
     public function setCodigoClienteAttribute($value){
         $this->attributes['codigoCliente'] = 'COD-' . $this->numeroDocumento ;
+    }
+
+    public function whatsapp_service(){
+        return new WhatsappService($this);
     }
 }
