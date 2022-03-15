@@ -191,7 +191,7 @@ class FelInvoiceController extends Controller
 
             $invoice_service->revocate();
 
-            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(5) );
+            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(3) );
 
             return response()->json([
                 'status' => true,
