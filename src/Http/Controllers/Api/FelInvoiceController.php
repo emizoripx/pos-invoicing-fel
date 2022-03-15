@@ -48,12 +48,19 @@ class FelInvoiceController extends Controller
             }
 
             
+            
             \Log::debug("Buscar Token >>>>>>>>>>>>>>>>>> ");
             $fel_token = FelToken::where('restorant_id', $fel_invoice->restorant_id)->first();
             
             if( empty($fel_token) ){
                 throw new Exception('No se tiene credenciales configuradas para emitir Facturas');
             }
+
+            $next_number = $fel_invoice->fel_restorant->service()->getNextNumber();
+            \Log::debug("NextNumberInvoice  >>>>>>>>>>>>>>>>>> " . $next_number);
+
+            $fel_invoice->numeroFactura = $next_number;
+            $fel_invoice->save();
 
             $invoice_service = new FelInvoiceService( $fel_token->host );
 
@@ -98,7 +105,12 @@ class FelInvoiceController extends Controller
         
         } catch(PosInvoicingException | Exception $ex){
             \Log::debug("Error en la Emisión: " . $ex->getMessage() . "File: " . $ex->getFile() . " Line: ". $ex->getLine());
-
+            
+            if($fel_invoice->cuf == null ){
+                $previus_number = $fel_invoice->fel_restorant->service()->getPreviousNumber();
+                \Log::debug("Reduce last number applied " . $previus_number);
+            }
+            
             return response()->json([
                 'status' => false,
                 'message'=> $ex->getMessage()

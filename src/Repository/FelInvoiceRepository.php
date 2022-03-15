@@ -16,7 +16,7 @@ class FelInvoiceRepository {
         $array_data = [
             'restorant_id' => $order->restorant_id,
             'order_id' => $order->id,
-            'numeroFactura' => $order->id,
+            // 'numeroFactura' => $order->id,
             'nombreRazonSocial' => $fel_data['nombreRazonSocial'],
             'codigoTipoDocumentoIdentidad' => isset($fel_data['codigoTipoDocumentoIdentidad']) ? $fel_data['codigoTipoDocumentoIdentidad'] : 1 ,
             'numeroDocumento' => $fel_data['numeroDocumento'],
