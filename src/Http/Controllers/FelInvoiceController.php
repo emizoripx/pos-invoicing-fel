@@ -49,7 +49,7 @@ class FelInvoiceController extends Controller
         //     $driversData[$driver->id] = $driver->name;
         // }
 
-        $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->whereNotNull('cuf')->orderBy('created_at', 'desc');
+        $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->whereNotNull('cuf')->orderBy('fechaEmision', 'desc');
 
         //Get client's orders
         // if (auth()->user()->hasRole('owner')) {
@@ -63,12 +63,12 @@ class FelInvoiceController extends Controller
 
         //BY DATE FROM
         if (isset($_GET['fromDate']) && strlen($_GET['fromDate']) > 3) {
-            $invoices = $invoices->whereDate('created_at', '>=', $_GET['fromDate']);
+            $invoices = $invoices->whereDate('fechaEmision', '>=', $_GET['fromDate']);
         }
 
         //BY DATE TO
         if (isset($_GET['toDate']) && strlen($_GET['toDate']) > 3) {
-            $invoices = $invoices->whereDate('created_at', '<=', $_GET['toDate']);
+            $invoices = $invoices->whereDate('fechaEmision', '<=', $_GET['toDate']);
         }
 
         //FILTER BT status
