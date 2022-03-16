@@ -39,6 +39,12 @@ class FelInvoiceWhatsappMessageController extends Controller
                 throw new Exception('No se encontro un número de telefono');
             }
 
+            $fel_restorant = auth()->user()->restorant->fel_restorant;
+            
+            if( !isset($fel_restorant) || (isset($fel_restorant) && !$fel_restorant->enabled_whatsapp_send )){
+                throw new Exception('No tiene habilitado el envío mensajes por Whatsapp');
+            }
+
             $response = $invoice->whatsapp_service()->sendMessage($phone_number);
     
             return response()->json([

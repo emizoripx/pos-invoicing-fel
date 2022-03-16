@@ -3,9 +3,9 @@
     <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title" id="modal-title-default">{{ __('Enviar Factura por Whatsapp')}}</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                <h6 class="e-modal-title" id="modal-title-default">{{ __('Enviar Factura por Whatsapp')}}</h6>
+                <button type="button" class="e-btn-close btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="modal-body">
