@@ -68,6 +68,11 @@ class WhatsappService {
 
         try {
 
+            $fel_restorant = auth()->user()->restorant->fel_restorant;
+            if( isset($fel_restorant) && $fel_restorant->has_limit && $fel_restorant->whatsapp_message_limit == 0 ){
+                throw new Exception('Mensaje no Enviado: Usted llego al Límite de Mensajes Asignados');
+            }
+
             $invoice_message = $this->invoice_message_repo->create([
                 'invoice_id' => $this->fel_invoice->id,
                 'restorant_id' => $this->fel_invoice->restorant_id,
@@ -88,6 +93,9 @@ class WhatsappService {
                 'message_description' => $response['message'],
                 'is_send' => true,
             ]);
+
+            $fel_restorant->whatsapp_message_limit = $fel_restorant->whatsapp_message_limit == 0 ? 0 : $fel_restorant->whatsapp_message_limit - 1;
+            $fel_restorant->save();
 
             return $response['message'];
 
