@@ -4,6 +4,7 @@ namespace EmizorIpx\PosInvoicingFel\Http\Controllers\Api;
 
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Jobs\GetInvoiceStatus;
+use EmizorIpx\PosInvoicingFel\Jobs\SendWhatsappMessage;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
@@ -47,12 +48,19 @@ class FelInvoiceController extends Controller
             }
 
             
+            
             \Log::debug("Buscar Token >>>>>>>>>>>>>>>>>> ");
             $fel_token = FelToken::where('restorant_id', $fel_invoice->restorant_id)->first();
             
             if( empty($fel_token) ){
                 throw new Exception('No se tiene credenciales configuradas para emitir Facturas');
             }
+
+            $next_number = $fel_invoice->fel_restorant->service()->getNextNumber();
+            \Log::debug("NextNumberInvoice  >>>>>>>>>>>>>>>>>> " . $next_number);
+
+            $fel_invoice->numeroFactura = $next_number;
+            $fel_invoice->save();
 
             $invoice_service = new FelInvoiceService( $fel_token->host );
 
@@ -81,6 +89,12 @@ class FelInvoiceController extends Controller
 
             GetInvoiceStatus::dispatch($fel_invoice, ActionTypes::EMIT)->delay( now()->addSeconds(5) );
 
+            $fel_restorant = auth()->user()->restorant->fel_restorant;
+            if( isset($fel_restorant) && $fel_restorant->enabled_whatsapp_send && $fel_restorant->enabled_whatsapp_auto_send && !is_null($fel_invoice->telefonoCliente)){
+
+                SendWhatsappMessage::dispatch($fel_invoice)->delay(now()->addSeconds(2));
+            }
+
             \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
             return response()->json([
                 'status' => true,
@@ -90,8 +104,13 @@ class FelInvoiceController extends Controller
 
         
         } catch(PosInvoicingException | Exception $ex){
-            \Log::debug("Error en la Emisión: " . $ex->getMessage());
-
+            \Log::debug("Error en la Emisión: " . $ex->getMessage() . "File: " . $ex->getFile() . " Line: ". $ex->getLine());
+            
+            if($fel_invoice->cuf == null ){
+                $previus_number = $fel_invoice->fel_restorant->service()->getPreviousNumber();
+                \Log::debug("Reduce last number applied " . $previus_number);
+            }
+            
             return response()->json([
                 'status' => false,
                 'message'=> $ex->getMessage()
@@ -172,7 +191,7 @@ class FelInvoiceController extends Controller
 
             $invoice_service->revocate();
 
-            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(5) );
+            GetInvoiceStatus::dispatch($invoice, ActionTypes::REVOCATE)->delay( now()->addSeconds(4) );
 
             return response()->json([
                 'status' => true,

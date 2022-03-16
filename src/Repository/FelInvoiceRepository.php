@@ -16,7 +16,7 @@ class FelInvoiceRepository {
         $array_data = [
             'restorant_id' => $order->restorant_id,
             'order_id' => $order->id,
-            'numeroFactura' => $order->id,
+            // 'numeroFactura' => $order->id,
             'nombreRazonSocial' => $fel_data['nombreRazonSocial'],
             'codigoTipoDocumentoIdentidad' => isset($fel_data['codigoTipoDocumentoIdentidad']) ? $fel_data['codigoTipoDocumentoIdentidad'] : 1 ,
             'numeroDocumento' => $fel_data['numeroDocumento'],
@@ -28,6 +28,7 @@ class FelInvoiceRepository {
             'codigoCliente' => '',
             'montoTotalSujetoIva' => $order->order_price,
             'emailCliente' => isset($fel_data['email_client']) ? $fel_data['email_client'] : null ,
+            'telefonoCliente' => isset($fel_data['phone_number']) ? $fel_data['phone_number'] : null ,
         ];
 
         $this->data = array_merge($this->data, $array_data);
@@ -90,6 +91,7 @@ class FelInvoiceRepository {
         $array_data = [
             'cuf' => $data['cuf'],
             'url_sin' => $data['urlSin'],
+            'url_pdf' => $data['urlPdf'],
             'tipoEmision' => EmissionTypes::DESCRIPTION[$data['emission_type_code']] ,
             'leyenda' => $data['leyenda'],
             'direccion' => $data['direccion'],

@@ -334,3 +334,9 @@
     </div>
 </div>
 <!-- End anular invoice Modal -->
+
+<!-- EMIZOR-INVOICE-INSERT -->
+<!-- Send Message Modal -->
+@include('posinvoicingfel::invoices.partials.whatsappmodal')
+<!-- End Message Modal -->
+<!-- EMIZOR-INVOICE-END -->

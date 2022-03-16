@@ -2,6 +2,8 @@
 "use strict";
 var receiptPOSInvoiceView=null;
 var anularInvoiceView=null;
+var enviarInvoiceView=null;
+
 
 
 function anularFactura(idOrder,opcion){
@@ -80,6 +82,52 @@ window.onload = function () {
       }
     },
   });
+
+  enviarInvoiceView = new Vue({
+    el:"#modalWhatsappSend",
+    data: {
+      client_phone_number:null,
+      invoice_id:null
+    },
+    methods: {
+      sendMessage(invoice_id){
+  
+        $('#indicatorenviar').show();
+        $('#botonenviar').hide();
+        $('#botonclosemodal').hide();
+        axios.post(withSession(`/posfel/v1/whatsapp-send/${invoice_id}`), {phone_number: this.client_phone_number}).then(function (response) {
+       
+          // $('#submitOrderPOS').show();
+          $('#indicatorenviar').hide();
+          $('#botonenviar').show();
+          $('#botonclosemodal').show();
+      
+          if(response.data.status){
+            // window.showOrders();
+  
+            $('#modalWhatsappSend').modal('hide');
+            js.notify(response.data.message, "success");
+          
+            // setTimeout(() => {
+            //  $("#posReciptInvoice").printThis();
+            // }, 500);
+             
+          }else{
+            js.notify(response.data.message, "warning");
+          }
+          
+          
+        }).catch(function (error) {
+          
+          $('#botonenviar').show();
+          $('#botonclosemodal').show();
+          $('#indicatorenviar').hide();
+          js.notify(error, "warning");
+        });
+      }
+    }
+  });
+
   anularInvoiceView=new Vue({
     el:"#modalAnularInvoiceView",
     data:{
@@ -147,6 +195,15 @@ function verAnularFactura(idFactura){
   anularInvoiceView.idinvoice = idFactura;
   $('#modalAnularInvoiceView').modal('show');
 }
+
+function verEnviarWhatsapp(invoice){
+  console.log('Enviar >>>> ');
+  enviarInvoiceView.client_phone_number = invoice.telefonoCliente;
+  enviarInvoiceView.invoice_id = invoice.id;
+  $('#modalWhatsappSend').modal('show');
+  
+}
+
 
 function verFactura(idOrder){
   console.log('ver factura :: idorder ', idOrder);
