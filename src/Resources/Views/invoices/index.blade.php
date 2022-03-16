@@ -1,5 +1,7 @@
 @extends('layouts.app', ['title' => __('Facturas')])
 
+@include('posinvoicingfel::invoices.includes.posstyles')
+
 @section('admin_title')
     {{__('Facturas')}}
 @endsection
