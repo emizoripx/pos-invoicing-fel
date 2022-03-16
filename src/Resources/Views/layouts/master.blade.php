@@ -178,7 +178,7 @@
 
    <!-- Notify JS -->
    <script src="{{ asset('custom') }}/js/notify.min.js"></script>
-
+   <script src="{{ asset('vendor') }}/posinvoicingfel/js/invoicemodal.js"></script>
   
   @stack('js')
   @yield('js')
@@ -194,7 +194,7 @@
 
   </script>
 
-<script src="{{ asset('vendor') }}/posinvoicingfel/js/invoicemodal.js"></script>
+
   <script type="text/javascript">
 
       $(function() {

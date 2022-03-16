@@ -166,14 +166,14 @@
     <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 style="" id="modal-title-default">{{ __('POS Invoice')}}</h6>
+                <h6 class="e-modal-title" id="modal-title-default">{{ __('POS Invoice')}}</h6>
                 <button type="button" class="e-btn-close btn-warning" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="modal-body">
 
-                <div id="posReciptInvoiceView" class="ml-1">
+                <div id="posReciptInvoiceView" style="background-color: #FFF;" >
                     <center>
                         <div>
                             <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b >FACTURA</b></p>
@@ -246,7 +246,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table id="totalInModal" class="mt-2 w-100">
+                        <table id="totalInModal" style="background-color: #8392ab; color: #FFF;" class="mt-2 w-100">
                             <tbody>
                                 <tr>
                                     <th class="p-1 w-70">MONTO A PAGAR Bs</th>
@@ -279,17 +279,17 @@
                             <img :src=" 'https://api.qrserver.com/v1/create-qr-code/?ecc=M&size=150x150&data='+(invoice? encodeURIComponent(invoice.url_sin):'')" class="image mr-3" alt=""/>
                         </div>
                     </center>  
-                    </div>
+                </div>
     
     
-                    <div class="modal-footer">
-                        <button data-bs-dismiss="modal" class="btn">{{ __('Close') }}</button>
-                        <button v-on:click="imprimirFactura()" class="btn bg-gradient-primary">{{ __('Print') }}</button>
-                    </div>
+                <div class="modal-footer">
+                    <button data-bs-dismiss="modal" class="btn">{{ __('Close') }}</button>
+                    <button id="printPosInvoiceView" v-on:click="imprimirFactura" class="btn bg-primary">{{ __('Print') }}</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 <!-- End POS invoice Modal -->
 <!--  anular invoice Modal -->
 <div class="modal  fade " id="modalAnularInvoiceView" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true" style="overflow: scroll;">

@@ -3,37 +3,37 @@
     <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title" id="modal-title-default">{{ __('POS Invoice')}}</h6>
-                <button type="button" class="btn-close btn" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                <h6 style="margin-bottom: 0; line-height: 1.5; font-weight: 600; font-size: 1rem; color: #252f40; margin-top: 0;" id="modal-title-default">{{ __('POS Invoice')}}</h6>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div id="posReciptInvoiceView" class="ml-1">
-                    <center> asdasd
+                <div id="posReciptInvoiceView" style="background-color: #FFF;" >
+                    <center>
                         <div>
-                            <p style="font-size: 10pt !important;" class="m-0 p-0"><b >FACTURA</b></p>
-                            <p style="font-size: 10pt !important;" class="mb-0 p-0"><b>CON DERECHO A CRÉDITO FISCAL</b></p>
+                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b >FACTURA</b></p>
+                            <p style="font-size: 10pt !important; font-weight: 700;" class="mb-0 p-0"><b>CON DERECHO A CRÉDITO FISCAL</b></p>
                             <p style="font-size: 10pt !important;" class="mb-0 p-0">@{{ invoice? invoice.razonSocialEmisor:"" }}</p>
-                            <p style="font-size: 10pt !important;" class="m-0 p-0"><b>@{{ invoice? ((invoice.codigoSucursal == 0) ? "Casa Matriz" : ('Sucursal N. ' + invoice.codigoSucursal)) :"" }}</b></p>
-                            <p style="font-size: 10pt !important;" class="m-0 p-0"><b>@{{ invoice? (invoice.numeroPuntoVenta? invoice.numeroPuntoVenta:"No. Punto Venta 0") : "" }}</b></p>
+                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b>@{{ invoice? ((invoice.codigoSucursal == 0) ? "Casa Matriz" : ('Sucursal N. ' + invoice.codigoSucursal)) :"" }}</b></p>
+                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b>@{{ invoice? (invoice.numeroPuntoVenta? invoice.numeroPuntoVenta:"No. Punto Venta 0") : "" }}</b></p>
                             <p style="font-size: 10pt !important;" class="m-0 p-0">@{{ invoice? invoice.direccion:"" }}</p>
                             <p style="font-size: 10pt !important;" class="m-0 p-0">Teléfono: @{{ invoice? invoice.telefonoEmisor:"" }}</p>
                             <p style="font-size: 10pt !important;" class="m-0 p-0">@{{ invoice? invoice.municipio:"" }}</p>
                             <hr>
-                            <p style="font-size: 10pt !important;" class="m-0 p-0"><b>NIT</b></p>
+                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b>NIT</b></p>
                             <p style="font-size: 10pt !important;" class="m-0 p-0">@{{ invoice? invoice.nitEmisor:"" }}</p>
-                            <p style="font-size: 10pt !important;" class="m-0 p-0"><b>FACTURA Nº</b></>
+                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b>FACTURA Nº</b></>
                             <p style="font-size: 10pt !important;" class="m-0 p-0">@{{ invoice? invoice.numeroFactura:"" }}</p>
-                            <p style="font-size: 10pt !important;" class="m-0 p-0"><b>CÓD. AUTORIZACIÓN</b></p>
+                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b>CÓD. AUTORIZACIÓN</b></p>
                             <p class="m-0 p-0" style="font-size: 10pt !important;">@{{ invoice? invoice.cuf:"" }}</p>
                             <hr>
                             <div class="row">
                                 <div class="col">
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-right"><b>NOMBRE/RAZÓN SOCIAL:</b></p>
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-right"><b>NIT/CI/CEX:</b></p>
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-right"><b>COD. CLIENTE:</b></p>
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-right"><b>F. EMISIÓN:</b></p>
+                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>NOMBRE/RAZÓN SOCIAL:</b></p>
+                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>NIT/CI/CEX:</b></p>
+                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>COD. CLIENTE:</b></p>
+                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>F. EMISIÓN:</b></p>
                                 </div>
                                 <div class="col">
                                     <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.nombreRazonSocial:"" }}</p>
@@ -82,7 +82,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table id="totalInModal" class="mt-2 w-100">
+                        <table id="totalInModal" style="background-color: #8392ab; color: #FFF;" class="mt-2 w-100">
                             <tbody>
                                 <tr>
                                     <th class="p-1 w-70">MONTO A PAGAR Bs</th>
