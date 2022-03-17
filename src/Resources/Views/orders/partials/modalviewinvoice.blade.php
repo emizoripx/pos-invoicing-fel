@@ -14,7 +14,12 @@
                         <div>
                             <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b >FACTURA</b></p>
                             <p style="font-size: 10pt !important; font-weight: 700;" class="mb-0 p-0"><b>CON DERECHO A CRÉDITO FISCAL</b></p>
-                            <p style="font-size: 10pt !important;" class="mb-0 p-0">@{{ invoice? invoice.razonSocialEmisor:"" }}</p>
+                            @if(auth()->user()->restorant->fel_restorant->is_unipersonal)
+                                <p style="font-size: 10pt !important;" class="mb-0 p-0">{{ auth()->user()->restorant->name }}</p>
+                                <p style="font-size: 10pt !important;" class="mb-0 p-0">De: @{{ invoice? invoice.razonSocialEmisor:"" }}</p>
+                            @else
+                                <p style="font-size: 10pt !important;" class="mb-0 p-0">@{{ invoice? invoice.razonSocialEmisor:"" }}</p>
+                            @endif
                             <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b>@{{ invoice? ((invoice.codigoSucursal == 0) ? "Casa Matriz" : ('Sucursal N. ' + invoice.codigoSucursal)) :"" }}</b></p>
                             <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0"><b>@{{ invoice? (invoice.numeroPuntoVenta? invoice.numeroPuntoVenta:"No. Punto Venta 0") : "" }}</b></p>
                             <p style="font-size: 10pt !important;" class="m-0 p-0">@{{ invoice? invoice.direccion:"" }}</p>
