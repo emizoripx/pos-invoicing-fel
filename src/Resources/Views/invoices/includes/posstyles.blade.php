@@ -67,3 +67,5 @@
   }
 
   </style>
+  <!--QR js -->
+  <script src="{{ asset('vendor') }}/qr/qrcode.min.js"></script> 

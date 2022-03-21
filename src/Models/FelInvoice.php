@@ -22,6 +22,10 @@ class FelInvoice extends Model
         $this->attributes['codigoCliente'] = 'COD-' . $this->numeroDocumento ;
     }
 
+    public function getFormattedFechaEmisionAttribute(){
+        return date('d/m/Y h:i A', strtotime($this->fechaEmision));
+    }
+
     public function whatsapp_service(){
         return new WhatsappService($this);
     }
