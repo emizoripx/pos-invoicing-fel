@@ -95,6 +95,8 @@ class FelInvoiceController extends Controller
                 SendWhatsappMessage::dispatch($fel_invoice)->delay(now()->addSeconds(2));
             }
 
+            $fel_invoice->fechaEmision = $fel_invoice->formatted_fecha_emision;
+
             \Log::debug("TIME OF STORAGE >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
             return response()->json([
                 'status' => true,
@@ -129,6 +131,8 @@ class FelInvoiceController extends Controller
             if( !auth()->user() || auth()->user()->restaurant_id != $invoice->restorant_id){
                 throw new Exception(__('No Access.'));
             }
+
+            $invoice->fechaEmision = $invoice->formatted_fecha_emision;
 
             return response()->json([
                 'status' => true,

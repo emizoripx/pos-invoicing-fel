@@ -4,7 +4,7 @@ var receiptPOSInvoiceView=null;
 var anularInvoiceView=null;
 var enviarInvoiceView=null;
 
-
+var qrcode=null;
 
 function anularFactura(idOrder,opcion){
   
@@ -79,6 +79,9 @@ window.onload = function () {
       },
       imprimirFactura(){
         imprimeFacturaPos();
+      },
+      formatDecimal(number){
+        return number.replace(',', '.');
       }
     },
   });
@@ -219,6 +222,7 @@ function verFactura(idOrder){
        js.notify('Factura obtenida.', "success");
        receiptPOSInvoiceView.invoice=response.data.invoice;
       
+       makeQrCode();
        $('#modalPOSInvoiceView').modal('show');
      }else{      
        js.notify('No existe la factura', "warning");
@@ -234,4 +238,24 @@ function verFactura(idOrder){
 
 function imprimeFacturaPos(){
   $("#posReciptInvoiceView").printThis();
+}
+
+function createQrInstance(){
+  if(qrcode == null){
+    qrcode= new QRCode("qrcode", {
+      width: 150,
+      height: 150,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.M
+    });
+  }
+}
+
+function makeQrCode(){
+  console.log("Generate QR");
+  console.log(receiptPOSInvoiceView.invoice.url_sin);
+  createQrInstance();
+  qrcode.clear();
+  qrcode.makeCode(receiptPOSInvoiceView.invoice.url_sin);
 }

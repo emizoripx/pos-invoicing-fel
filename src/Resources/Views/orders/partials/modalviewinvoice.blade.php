@@ -1,4 +1,5 @@
 <!-- POS VER invoice Modal -->
+@include('posinvoicingfel::invoices.includes.posstyles')
 <div class="modal  fade " id="modalPOSInvoiceView" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true" style="overflow: scroll;">
     <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
         <div class="modal-content">
@@ -35,16 +36,41 @@
                             <hr>
                             <div class="row">
                                 <div class="col">
-                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>NOMBRE/RAZÓN SOCIAL:</b></p>
-                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>NIT/CI/CEX:</b></p>
-                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>COD. CLIENTE:</b></p>
-                                    <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>F. EMISIÓN:</b></p>
-                                </div>
-                                <div class="col">
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.nombreRazonSocial:"" }}</p>
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? (invoice.numeroDocumento + (invoice.complemento? invoice.complemento: "")):"" }}</p>
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.codigoCliente:"" }}</p>
-                                    <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.fechaEmision:"" }}</p>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>NOMBRE/RAZÓN SOCIAL:</b></p>
+                                        </div>
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.nombreRazonSocial:"" }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>NIT/CI/CEX:</b></p>
+                                        </div>
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.numeroDocumento:"" }} @{{ invoice? invoice.complemento:"" }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>COD. CLIENTE:</b></p>
+                                        </div>
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.codigoCliente:"" }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important; font-weight: 700;" class="m-0 p-0 text-right"><b>F. EMISIÓN:</b></p>
+                                        </div>
+                                        <div class="col">
+                                            <p style="font-size: 10pt !important;" class="m-0 p-0 text-left">@{{ invoice? invoice.fechaEmision:"" }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
                                 </div>
                             </div>
                             <hr>
@@ -54,36 +80,41 @@
                         <table class="w-100">
                             <thead>
                                 <tr>
-                                    <th style="width:50%;" class="col-8" scope="col">{{__('Item') }}</th>
-                                    <th style="width:25%;"  class="col-2" scope="col">{{ __('Qty') }}</th>
-                                    <th  style="width:25%;" class="col-2" scope="col">{{ __('Subtotal') }}</th>
+                                    <th style="width:70% !important; " class="col-8" scope="col">{{__('Item') }}</th>
+                                    <th style="width:10% !important; "  class="col-1" scope="col">{{ __('Qty') }}</th>
+                                    <th style="width:10% !important; padding-right: 15px; "  class="col-1" scope="col">{{ __('P. Unitario') }}</th>
+                                    <th style="width:10% !important; " class="col-2" scope="col">{{ __('Subtotal') }}</th>
                                 </tr>
                             </thead>
                             <tbody >
                                 <tr v-for="item in (invoice?invoice.detalles:[])">
                                     <td>@{{ item.descripcion }}</td>
                                     <td>@{{ item.cantidad }}</td>
-                                    <td>@{{ formatPrice(item.subTotal) }}</td>
+                                    <td>@{{ item.precioUnitario.toFixed(2) }}</td>
+                                    <td>@{{ formatDecimal(formatPrice(item.subTotal)) }}</td>
                                 </tr>
                                 <tr>
-                                  <th class="p-1 w-70" colspan="2">{{ __('Subtotal.') }}</th>
-                                  <td class="p-1 w-30">@{{ invoice?formatPrice((invoice.montoTotal*1).toFixed(2)):"" }}</td>
+                                  <th class="p-1 w-70" colspan="3">{{ __('Subtotal.') }}</th>
+                                  <td class="p-1 w-30">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2))):"" }}</td>
                                 </tr>
                                 
                                 <tr class="blockDelivery">
                                     <th></th>
                                     <th class="p-1 w-70">{{ __('Discount') }}</th>
-                                    <td class="p-1 w-30">@{{ invoice? (invoice.descuentoAdicional? formatPrice((invoice.descuentoAdicional*1).toFixed(2)) : formatPrice(0)):formatPrice(0) }}</td>
+                                    <th></th>
+                                    <td class="p-1 w-30">@{{ invoice? (invoice.descuentoAdicional? formatDecimal(formatPrice((invoice.descuentoAdicional*1).toFixed(2))) : formatDecimal(formatPrice(0))):formatDecimal(formatPrice(0)) }}</td>
                                 </tr>
                                 <tr class="blockDelivery">
                                     <th></th>
                                     <th class="p-1 w-70">{{ __('Total') }}</th>
-                                    <th class="p-1 w-30">@{{ invoice?formatPrice((invoice.montoTotal*1).toFixed(2)):"" }}</th>
+                                    <th></th>
+                                    <th class="p-1 w-30">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2))):"" }}</th>
                                 </tr>
                                 <tr v-if="invoice&&invoice.montoGiftCard&&invoice.montoGiftCard>0" class="blockDelivery">
                                     <th></th>
                                     <th class="p-1 w-70">{{ __('Monto Gift Card') }}</th>
-                                    <th class="p-1 w-30">@{{ invoice?formatPrice((invoice.montoGiftCard*1).toFixed(2)):"" }}</th>
+                                    <th></th>
+                                    <th class="p-1 w-30">@{{ invoice?formatDecimal(formatPrice((invoice.montoGiftCard*1).toFixed(2))):"" }}</th>
                                 </tr>
                             </tbody>
                         </table>
@@ -91,7 +122,7 @@
                             <tbody>
                                 <tr>
                                     <th class="p-1 w-70">MONTO A PAGAR Bs</th>
-                                    <th class="p-1 w-30 text-right">@{{ invoice?formatPrice((invoice.montoTotal*1).toFixed(2)):"" }}</th>
+                                    <th class="p-1 w-30 text-right">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2))):"" }}</th>
                                 </tr>
                             </tbody>
                         </table>
@@ -100,7 +131,7 @@
                                 <tr>
                                     <th></th>
                                     <th class="p-1 w-70">{{ __('Importe Base Crédito Fiscal.') }}</th>
-                                    <td class="p-1 w-30  text-right">@{{ invoice?formatPrice((invoice.montoTotalSujetoIva*1).toFixed(2)):"" }}</td>
+                                    <td class="p-1 w-30  text-right">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotalSujetoIva*1).toFixed(2))):"" }}</td>
                                 </tr>
                                 <tr>
                                     <th></th>
@@ -117,7 +148,8 @@
                             <p style="font-size: 8pt !important;" class="m-0 py-2 text-center">@{{ invoice? invoice.leyenda:"" }}</p>
                             <p style="font-size: 8pt !important;" class="m-0 p-0 text-center">@{{ invoice? ((invoice.tipoEmision == 'En Linea')? "\"Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea\"": "\"Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido fuera de línea, verifique su envío con su proveedor o en la página web www.impuestos.gob.bo\""):"" }}</p>
                             <br />
-                            <img :src=" 'https://api.qrserver.com/v1/create-qr-code/?ecc=M&size=150x150&data='+(invoice? encodeURIComponent(invoice.url_sin):'')" class="image mr-3" alt=""/>
+                            {{-- <img :src=" 'https://api.qrserver.com/v1/create-qr-code/?ecc=M&size=150x150&data='+(invoice? encodeURIComponent(invoice.url_sin):'')" class="image mr-3" alt=""/> --}}
+                            <div style="margin: 10px; width:150px; height:150px;" id="qrcode"></div>
                         </div>
                     </center>  
                 </div>

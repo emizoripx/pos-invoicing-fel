@@ -1,6 +1,7 @@
 
 "use strict";
 var butonInvoice=null;
+var qrcode=null;
 
 window.onload = function () {
 
@@ -58,6 +59,7 @@ window.onload = function () {
             if(response.data.status){       
               
               butonInvoice.invoice=response.data.invoice;
+              makeQrCode();
               butonInvoice.titleButon = 'Ver Factura';
               // $('#modalPOSInvoiceView').modal('show');
               if(butonInvoice.invoice.cuf){       
@@ -106,6 +108,9 @@ window.onload = function () {
         // js.notify('Abrir modal', "success");
         // $('#modalPOSInvoiceView').modal('show');
         
+      },
+      formatDecimal(number){
+        return number.replace(',', '.');
       }
     },
     created: function(){
@@ -134,6 +139,7 @@ function facturarPos(idOrder){
        
        js.notify(response.data.message, "success");
        butonInvoice.invoice=response.data.invoice;
+       makeQrCode();
        butonInvoice.titleButon = 'Ver Factura';
        
        $('#modalPOSInvoiceView').modal('show');
@@ -163,4 +169,24 @@ function abrirModalVerFactura(){
 function imprimirFactura(){
   console.log('function imprimir invoice :: ');
   $("#posReciptInvoiceView").printThis();
+}
+
+function createQrInstance(){
+  if(qrcode == null){
+    qrcode= new QRCode("qrcode", {
+      width: 150,
+      height: 150,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.M
+    });
+  }
+}
+
+function makeQrCode(){
+  console.log("Generate QR");
+  console.log( butonInvoice.invoice.url_sin !=null ? butonInvoice.invoice.url_sin : '');
+  createQrInstance();
+  qrcode.clear();
+  qrcode.makeCode(butonInvoice.invoice.url_sin !=null ? butonInvoice.invoice.url_sin : '');
 }
