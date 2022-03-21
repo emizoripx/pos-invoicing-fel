@@ -3,6 +3,7 @@
 namespace EmizorIpx\PosInvoicingFel;
 
 use EmizorIpx\PosInvoicingFel\Console\Commands\HomologateDemoProducts;
+use EmizorIpx\PosInvoicingFel\Console\Commands\SyncBranches;
 use EmizorIpx\PosInvoicingFel\Console\Commands\SyncParametrics;
 use EmizorIpx\PosInvoicingFel\Console\Commands\SyncSinProducts;
 use EmizorIpx\PosInvoicingFel\Providers\PosInvoicingFelEventServiceProvider;
@@ -60,6 +61,7 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
                 SyncParametrics::class,
                 SyncSinProducts::class,
                 HomologateDemoProducts::class,
+                SyncBranches::class,
                 
             ]);
         }

@@ -33,6 +33,14 @@ class FelInvoiceController extends Controller
     }
 
 
+    public function get_invoice(Request $request, $id){
+
+        $invoice = FelInvoice::where('id', $id)->first();
+
+        return view('posinvoicingfel::invoices.printTemplate', compact('invoice'))->render();
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +48,9 @@ class FelInvoiceController extends Controller
      */
     public function index(Request $request)
     {
+        if( !auth()->user() ){
+            return redirect()->route('login');
+        }
 
         $restorants = Restorant::where(['active'=>1])->get();
         // $drivers = User::role('driver')->where(['active'=>1])->get();
@@ -50,6 +61,12 @@ class FelInvoiceController extends Controller
         // }
 
         $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->whereNotNull('cuf')->orderBy('fechaEmision', 'desc');
+
+        // $user = auth()->user();
+
+        // if( isset( $user->fel_user ) && isset( $user->fel_user->fel_branch ) && !is_null($user->fel_user->fel_branch->codigo_sucursal) ){
+        //     $invoices = $invoices->where('codigoSucursal', $user->fel_user->fel_branch->codigo_sucursal );
+        // }
 
         //Get client's orders
         // if (auth()->user()->hasRole('owner')) {

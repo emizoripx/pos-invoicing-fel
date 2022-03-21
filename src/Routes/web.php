@@ -7,4 +7,6 @@ Route::group(['namespace' => "\EmizorIpx\PosInvoicingFel\Http\Controllers", 'pre
 
     Route::resource('invoices', 'FelInvoiceController');
 
+    Route::get('get-invoice/{id}', 'FelInvoiceController@get_invoice');
+
 });
