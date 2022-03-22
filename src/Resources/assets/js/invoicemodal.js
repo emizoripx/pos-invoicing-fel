@@ -237,7 +237,7 @@ function verFactura(idOrder){
 }
 
 function imprimeFacturaPos(){
-  $("#posReciptInvoiceView").printThis();
+  $("#posReciptInvoiceView").printThis({printContainer: false});
 }
 
 function createQrInstance(){
@@ -254,8 +254,8 @@ function createQrInstance(){
 
 function makeQrCode(){
   console.log("Generate QR");
-  console.log(receiptPOSInvoiceView.invoice.url_sin);
+  console.log(receiptPOSInvoiceView.invoice.url_sin !=null ? receiptPOSInvoiceView.invoice.url_sin : '');
   createQrInstance();
   qrcode.clear();
-  qrcode.makeCode(receiptPOSInvoiceView.invoice.url_sin);
+  qrcode.makeCode(receiptPOSInvoiceView.invoice.url_sin !=null ? receiptPOSInvoiceView.invoice.url_sin : '');
 }
