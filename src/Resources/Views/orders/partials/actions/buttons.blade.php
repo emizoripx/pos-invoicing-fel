@@ -39,6 +39,6 @@ $lastStatusAlisas=$order->status->pluck('alias')->last();
         </div>
     </nav>
     @include('orders.partials.modalcreateinvoice')
-    @include('orders.partials.modalviewinvoice')
+    @include('orders.partials.modalviewinvoice', ['modal_id' => 'modalPOSInvoiceView', 'pos_invoice' => 'posReciptInvoiceView', 'is_order' => true])
 </div>
 @endif
