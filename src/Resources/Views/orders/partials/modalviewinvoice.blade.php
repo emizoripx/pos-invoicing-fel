@@ -137,7 +137,7 @@
                                 </tr>
                                 <tr>
                                     <th></th>
-                                    <td>SON: @{{ invoice? (invoice.montoLiteral? invoice.montoLiteral : ""):"" }}</td>
+                                    <td colspan="2">SON: @{{ invoice? (invoice.montoLiteral? invoice.montoLiteral : ""):"" }}</td>
                                 </tr>
                             </tbody>
                         </table>
