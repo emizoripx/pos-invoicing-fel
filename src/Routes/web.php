@@ -7,4 +7,8 @@ Route::group(['namespace' => "\EmizorIpx\PosInvoicingFel\Http\Controllers", 'pre
 
     Route::resource('invoices', 'FelInvoiceController');
 
+    Route::resource('contingency', 'FelContingencyFileController');
+
+    Route::resource('cafc', 'FelCafcCodeController');
+
 });
