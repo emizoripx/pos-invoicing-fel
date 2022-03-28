@@ -5,6 +5,7 @@ namespace EmizorIpx\PosInvoicingFel\Http\Controllers;
 use App\Exports\OrdersExport;
 use App\Restorant;
 use App\User;
+use EmizorIpx\PosInvoicingFel\Jobs\ProcessInvoicesContingecy;
 use EmizorIpx\PosInvoicingFel\Models\FelContingencyFile;
 use EmizorIpx\PosInvoicingFel\Repository\FelContingencyFileRepository;
 use Exception;
@@ -95,7 +96,12 @@ class FelContingencyFileController extends Controller
                 throw new Exception("No existe ningún archivo");
             }
 
-            $this->contingency_file_repo->processRequest($request);
+            $file = $this->contingency_file_repo->processRequest($request);
+
+            if( !is_null($file) ){
+                ProcessInvoicesContingecy::dispatch( $file, auth()->user()->id );
+            }
+
 
             return redirect()->route('contingency.index')->withStatus(__('Archivo guardado correctamente y se inició el proceso.'));
 

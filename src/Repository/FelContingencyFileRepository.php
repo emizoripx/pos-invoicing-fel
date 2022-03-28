@@ -3,6 +3,7 @@
 namespace EmizorIpx\PosInvoicingFel\Repository;
 
 use EmizorIpx\PosInvoicingFel\Models\FelContingencyFile;
+use EmizorIpx\PosInvoicingFel\Utils\ContingencyFileStatus;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 
@@ -14,6 +15,7 @@ class FelContingencyFileRepository {
     public function processRequest ($request, $id = null){
 
         $contingency_file = null;
+        $file_record = null;
         $input = [];
         $upload_new_file = false;
         $restorant_id = auth()->user()->restorant->id;
@@ -53,7 +55,7 @@ class FelContingencyFileRepository {
                 "restorant_id" => $restorant_id,
                 "user_id" => auth()->user()->id,
                 "cafc_id" => $request->cafc_id,
-                "state" => FelContingencyFile::STATUS_PENDING,
+                "state" => ContingencyFileStatus::STATUS_PENDING,
                 "file_name" => $file_object->getClientOriginalName(),
                 "file_content_type" => $file_object->getClientMimeType(),
                 // "file_size_kb" => $file_object->getClientSize(),
@@ -63,7 +65,7 @@ class FelContingencyFileRepository {
 
             $input['file_path'] = $path;
 
-            $this->provider::create($input);
+            $file_record = $this->provider::create($input);
 
         }
 
@@ -76,6 +78,8 @@ class FelContingencyFileRepository {
             }
 
         }
+
+        return $file_record;
 
 
     }

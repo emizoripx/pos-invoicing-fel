@@ -4,11 +4,14 @@ namespace EmizorIpx\PosInvoicingFel\Models;
 
 use App\Restorant;
 use EmizorIpx\PosInvoicingFel\Services\Whatsapp\WhatsappService;
+use EmizorIpx\PosInvoicingFel\Traits\FelInvoiceContingencyEmitTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class FelInvoice extends Model
 {
+    use FelInvoiceContingencyEmitTrait;
+
     protected $table = 'fel_invoices';
 
     protected $guarded = [];

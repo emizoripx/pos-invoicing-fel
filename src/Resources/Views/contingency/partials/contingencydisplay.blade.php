@@ -43,7 +43,7 @@
         @include('posinvoicingfel::contingency.partials.laststatus')
     </td>
     <td class="table-web">
-        {{ $file->errors }}
+        {{-- {{ $file->errors }} --}}
     </td>
     {{-- @include('posinvoicingfel::invoices.partials.actions.table',['invoice' => $invoice ]) --}}
 </tr>

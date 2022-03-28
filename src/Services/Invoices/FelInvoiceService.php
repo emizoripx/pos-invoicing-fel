@@ -6,6 +6,9 @@ use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Services\BaseConnection;
 use EmizorIpx\PosInvoicingFel\Services\Invoices\Resources\CompraVentaResource;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7;
 use Exception;
 use Throwable;
 
@@ -196,12 +199,18 @@ class FelInvoiceService extends BaseConnection {
             
             return $parsed_response;
 
+        } catch( ClientException $cex ){
+
+            $errors = json_decode($cex->getResponse()->getBody())->errors;
+            \Log::error($errors);
+
+            throw new PosInvoicingException( json_encode($errors) );
 
         } catch(Exception $ex){
 
-            \Log::error($ex->getMessage());
+            \Log::error("Error en la creación de la factura: " . $ex->getMessage());
 
-            throw new PosInvoicingException("Error en la creación de la factura: " . $ex->getMessage() );
+            throw new PosInvoicingException($ex->getMessage() );
 
         }
 
