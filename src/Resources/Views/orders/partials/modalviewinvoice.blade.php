@@ -13,6 +13,7 @@
                 <div id="{{ $pos_invoice }}" style="background-color: white !important;" >
                     <center>
                         <?php $font_size = isset(auth()->user()->restorant->fel_restorant->settings['font_size']) ? auth()->user()->restorant->fel_restorant->settings['font_size'] : 10 ?>
+                        <?php $whitout_total_background = isset(auth()->user()->restorant->fel_restorant->settings['without_background_total']) ? auth()->user()->restorant->fel_restorant->settings['without_background_total'] : 0 ?>
 
                         <div style="color: black !important; background-color: white !important;">
                             <p style="font-size: {{ $font_size }}pt !important; font-weight: 700;" class="m-0 p-0"><b >FACTURA</b></p>
@@ -120,7 +121,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table id="totalInModal" style="font-size: {{ $font_size }}pt !important; background-color: #1f2227; color: #FFF;" class="mt-2 w-100">
+                        <table id="totalInModal" style="font-size: {{ $font_size }}pt !important; @if( $whitout_total_background == 1 )  color: black; @else background-color: #1f2227; color: #FFF;  @endif " class="mt-2 w-100">
                             <tbody>
                                 <tr>
                                     <th class="p-1 w-70">MONTO A PAGAR Bs</th>
