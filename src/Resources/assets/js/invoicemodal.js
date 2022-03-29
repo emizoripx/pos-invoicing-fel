@@ -37,6 +37,33 @@ function anularFactura(idOrder,opcion){
      js.notify(error, "warning");
    });
 }
+function validateStateInvoice(idInvoice){
+  
+  console.log('Validar :: idFacrtura ', idInvoice);
+  $(`#indicatorvalidate_${idInvoice}`).show();
+  $(`#btn_validate_${idInvoice}`).hide();
+  axios.get(`/posfel/v1/invoice/state/${idInvoice}`).then(function (response) {
+    
+    
+    $(`#btn_validate_${idInvoice}`).show();
+    $(`#indicatorvalidate_${idInvoice}`).hide();
+ 
+     if(response.data.status){       
+       js.notify(response.data.message, "success");
+       window.location.reload();
+     }else{            
+       js.notify(response.data.message, "warning");
+     }
+     
+     
+   }).catch(function (error) {
+    
+    //  $('#modalAnularInvoiceView').modal('hide');
+     $(`#btn_validate_${idInvoice}`).show();
+     $(`#indicatorvalidate_${idInvoice}`).hide();
+     js.notify(error, "warning");
+   });
+}
 
 window.onload = function () {
 
