@@ -19,5 +19,9 @@ class FelRestorant extends Model
     public function service(){
         return new RestorantService($this);
     }
+    
+    public function fel_products(){
+        return $this->hasMany( FelProduct::class, 'restorant_id', 'restorant_id' );
+    }
 
 }

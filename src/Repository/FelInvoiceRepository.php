@@ -31,6 +31,15 @@ class FelInvoiceRepository {
             'telefonoCliente' => isset($fel_data['phone_number']) ? $fel_data['phone_number'] : null ,
         ];
 
+        if( isset($fel_data['cafc']) ){
+
+            $array_data['cafc'] = $fel_data['cafc'];
+            $array_data['fechaEmision'] = $fel_data['fechaEmision'];
+            $array_data['numeroFactura'] = $fel_data['numeroFactura'];
+            $array_data['file_id'] = $fel_data['file_id'];
+
+        }
+
         $this->data = array_merge($this->data, $array_data);
     }
 
@@ -141,6 +150,12 @@ class FelInvoiceRepository {
 
     public function getFelInvoiceDetails(){
         return $this->data['detalles'];
+    }
+
+    public static function numberInvoiceCafcExists( $number_invoice, $restorant_id, $cafc_code ){
+
+        return  \DB::table('fel_invoices')->where('restorant_id', $restorant_id)->where('numeroFactura', $number_invoice)->where('cafc', $cafc_code)->exists();
+
     }
 
 }

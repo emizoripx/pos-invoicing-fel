@@ -1,0 +1,2 @@
+<a href="{{ route( "cafc.edit", $cafc->id) }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-ruler-pencil"></i></span> {{ __('crud.edit') }}</a>
+{{-- <a href="{{ route( $setup['webroute_path']."delete",$param) }}" class="btn btn-danger btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-remove"></i></span> {{ __('crud.delete') }}</a> --}}

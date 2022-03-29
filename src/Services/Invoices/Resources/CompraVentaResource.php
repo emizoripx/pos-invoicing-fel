@@ -3,6 +3,7 @@
 namespace EmizorIpx\PosInvoicingFel\Services\Invoices\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class CompraVentaResource extends JsonResource
 {
@@ -14,7 +15,7 @@ class CompraVentaResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             "montoTotal" => round($this->montoTotal, 2),
             "montoTotalSujetoIva" => round($this->montoTotalSujetoIva, 2),
             "numeroFactura" => $this->numeroFactura,
@@ -29,8 +30,16 @@ class CompraVentaResource extends JsonResource
             "codigoDocumentoSector" => 1,
             'detalles' => DetalleCompraVentaResource::collection(collect($this->detalles)),
             "emailCliente" => $this->emailCliente,
-            // "cafc" => $this->cafc,
+            "cafc" => $this->cafc,
             // "descuentoAdicional" => round($this->descuentoAdicional,2),
         ];
+
+        if( !is_null($this->cafc) ){
+            $resource['cafc'] = $this->cafc;
+            $resource['numeroFactura'] = $this->numeroFactura;
+            $resource['fechaEmision'] = substr( Carbon::parse($this->fechaEmision)->format('Y-m-d\TH:i:s.u'), 0, -3);
+        }
+
+        return $resource;
     }
 }

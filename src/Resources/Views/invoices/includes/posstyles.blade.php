@@ -66,6 +66,15 @@
     margin-top: 0;
   }
 
+
+  .col-error {
+    width: 200px !important; 
+    max-width: 200px !important; 
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    word-break: break-all !important;
+  }
+
   </style>
   <!--QR js -->
   <script src="{{ asset('vendor') }}/qr/qrcode.min.js"></script> 
