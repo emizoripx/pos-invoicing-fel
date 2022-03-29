@@ -5,6 +5,7 @@ namespace EmizorIpx\PosInvoicingFel\Http\Controllers;
 use App\Exports\OrdersExport;
 use App\Restorant;
 use App\User;
+use EmizorIpx\PosInvoicingFel\Exports\TemplateContingencyExport;
 use EmizorIpx\PosInvoicingFel\Jobs\ProcessInvoicesContingecy;
 use EmizorIpx\PosInvoicingFel\Models\FelContingencyFile;
 use EmizorIpx\PosInvoicingFel\Repository\FelContingencyFileRepository;
@@ -165,6 +166,23 @@ class FelContingencyFileController extends Controller
     {
         //
     }
+
+    public function downloadReport($id)
+    {
+        $file = \DB::table('fel_contingency_files')->where('id', $id)->first();
+
+        if($file){
+            return Storage::disk('s3')->download($file->error_report_path);
+            // \Log::debug($file);
+            // header("Cache-Control: public");
+            // header("Content-Description: File Transfer");
+            // header("Content-Disposition: attachment; filename=facturas.csv");
+            // header("Content-Type: text/csv");
+            // return readfile($file);
+        }
+
+    }
+
 
 
     

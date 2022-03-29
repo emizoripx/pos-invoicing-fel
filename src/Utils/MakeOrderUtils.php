@@ -82,7 +82,7 @@ class MakeOrderUtils {
         return $items ;
     }
 
-    public static function prepareFelData($data, $cafc){
+    public static function prepareFelData($data, $cafc, $file_id){
 
         return [
             'codigoTipoDocumentoIdentidad' => $data['codigoTipoDocumentoIdentidad'],
@@ -94,7 +94,8 @@ class MakeOrderUtils {
             'phone_number' => $data['telefonoCliente'],
             'cafc' => $cafc,
             'fechaEmision' => $data['fechaEmision'],
-            'numeroFactura' => $data['numeroFactura']
+            'numeroFactura' => $data['numeroFactura'],
+            'file_id' => $file_id
             
         ];
 

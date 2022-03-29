@@ -3,7 +3,7 @@
 namespace EmizorIpx\PosInvoicingFel\Jobs;
 
 use App\Restorant;
-use EmizorIpx\PosInvoicingFel\Imports\FelInvoiecAuxImport;
+use EmizorIpx\PosInvoicingFel\Imports\FelInvoiceAuxImport;
 use EmizorIpx\PosInvoicingFel\Models\FelContingencyFile;
 use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceAuxRepository;
 use EmizorIpx\PosInvoicingFel\Utils\ContingencyFileStatus;
@@ -32,9 +32,10 @@ class ProcessInvoicesContingecy implements ShouldQueue
 
     protected $user_id;
 
-    protected $delay_times = [5];
+    protected $invoice_aux_repo;
 
-    public $tries = 0;
+
+    public $tries = 1;
 
     /**
      * Create a new job instance.
@@ -46,6 +47,8 @@ class ProcessInvoicesContingecy implements ShouldQueue
         $this->file = $file;
         $this->restorant = auth()->user()->restorant;
         $this->user_id = $user_id;
+
+        $this->invoice_aux_repo = new FelInvoiceAuxRepository();
     }
 
 
@@ -67,27 +70,45 @@ class ProcessInvoicesContingecy implements ShouldQueue
 
 
             \Log::debug("PROCESS INVOICES JOBS INIT >>>>>>>>>>>>>>>>>>>>> #". $this->file->file_name . " Attempts #". $this->attempts());
+            
+            
+            $init = microtime(true);
 
             $cafc_code = $this->file->cafc_code;
             $this->file->update(['state' => ContingencyFileStatus::STATUS_PROCESSING]);
-            Excel::import( new FelInvoiecAuxImport($this->restorant, $this->user_id, $this->file->id, $cafc_code->from_invoice_number, $cafc_code->to_invoice_number), $this->file->file_path, 's3', \Maatwebsite\Excel\Excel::CSV );
+            Excel::import( new FelInvoiceAuxImport($this->restorant, $this->user_id, $this->file->id, $cafc_code->from_invoice_number, $cafc_code->to_invoice_number, $cafc_code->cafc), $this->file->file_path, 's3', \Maatwebsite\Excel\Excel::CSV );
             
-            $invoice_aux_repo = new FelInvoiceAuxRepository();
 
-            $invoice_aux_repo->setCafcCode( $cafc_code->cafc );
+            $this->invoice_aux_repo->setCafcCode( $cafc_code->cafc );
 
-            $invoice_aux_repo->processInvoices($this->file->id);
+            $error_invoices = $this->invoice_aux_repo->processInvoices($this->file->id);
 
-            $this->file->update(['state' => ContingencyFileStatus::STATUS_PROCESSED, 'processed_at' => Carbon::now()]);
+            if( count($error_invoices) == 0){
+                $this->file->update(['state' => ContingencyFileStatus::STATUS_PROCESSED, 'processed_at' => Carbon::now()]);
+                
+            } else {
+                $this->file->update(['state' => ContingencyFileStatus::STATUS_OBSERVED]);
+                $this->file->errors = [ 'error' => 'Error al Procesar Facturas' ];
+                $this->file->save();
+
+                \Log::debug("Invoices Fails " . json_encode($error_invoices));
+
+                $this->invoice_aux_repo->makeErrorsReport($this->file->id, $error_invoices, $this->file->file_name, $this->restorant->id);
+            }
+
+        \Log::debug("TIME OF JOBS FINAL >>>>>>>>>>>>>>>>>> " . (microtime(true) - $init) );
+
 
         } catch( Exception $ex ){
-            \Log::debug("SEND WHATSAPP JOBS >>>>>>>>>>>>>>>>>>>>> Log Exception " .$ex->getMessage());
+            \Log::debug("CONTINGENCY JOBS >>>>>>>>>>>>>>>>>>>>> Log Exception " .$ex->getMessage() . " FILE " .$ex->getFile() . ' Line ' . $ex->getLine());
 
             $this->file->update(['state' => ContingencyFileStatus::STATUS_OBSERVED]);
             $this->file->errors = [ 'error' => $ex->getMessage() ];
             $this->file->save();
 
-            $this->fail();
+            $this->invoice_aux_repo->removeRegisters($this->file->id, $this->restorant->id);
+
+            $this->fail($ex);
 
         }
     }

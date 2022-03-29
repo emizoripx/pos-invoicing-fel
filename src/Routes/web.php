@@ -11,4 +11,8 @@ Route::group(['namespace' => "\EmizorIpx\PosInvoicingFel\Http\Controllers", 'pre
 
     Route::resource('cafc', 'FelCafcCodeController');
 
+    Route::get('contingency/download-report/{id}', 'FelContingencyFileController@downloadReport')->name('contingency.download_report');
+
+    Route::get('products/export/{id_restorant}', 'FelProductoController@export')->name('products.export');
+
 });

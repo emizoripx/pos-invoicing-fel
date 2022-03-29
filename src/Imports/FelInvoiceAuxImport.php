@@ -12,9 +12,10 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 use Carbon\Carbon;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoiceAux;
+use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
 use EmizorIpx\PosInvoicingFel\Utils\IdentityDocument;
 
-class FelInvoiecAuxImport implements ToModel, WithHeadingRow
+class FelInvoiceAuxImport implements ToModel, WithHeadingRow
 {
     protected $restorant;
 
@@ -34,10 +35,12 @@ class FelInvoiecAuxImport implements ToModel, WithHeadingRow
 
     protected $cafc_to;
 
-    public function __construct( Restorant $restorant, $user_id, $file_id, $cafc_from, $cafc_to)
+    protected $cafc_code;
+
+    public function __construct( Restorant $restorant, $user_id, $file_id, $cafc_from, $cafc_to, $cafc_code)
     {
-        \Log::debug("Items ");
-        \Log::debug(json_encode($restorant->fel_restorant->fel_products));
+        // \Log::debug("Items ");
+        // \Log::debug(json_encode($restorant->fel_restorant->fel_products));
         $this->restorant = $restorant;
         $this->items = $restorant->fel_restorant->fel_products;
         $this->number_invoice = null;
@@ -47,6 +50,7 @@ class FelInvoiecAuxImport implements ToModel, WithHeadingRow
 
         $this->cafc_from = $cafc_from;
         $this->cafc_to = $cafc_to;
+        $this->cafc_code = $cafc_code;
     }
 
     /**
@@ -72,7 +76,9 @@ class FelInvoiecAuxImport implements ToModel, WithHeadingRow
 
         }
 
-        
+        if( FelInvoiceRepository::numberInvoiceCafcExists(intval($row['numerofactura']), $this->restorant->id, $this->cafc_code)  ){
+            throw new Exception('Número de Factura #' . intval($row['numerofactura']) . ' para el CAFC ' . $this->cafc_code . " ya se encuentra registrado");
+        }
 
         if( is_null($this->emission_date) ){
             $this->emission_date = $date_parsed;
@@ -80,7 +86,7 @@ class FelInvoiecAuxImport implements ToModel, WithHeadingRow
 
         $date_parsed_aux = $date_parsed;
 
-        if( $date_parsed->equalTo($this->emission_date) ){
+        if( $date_parsed->equalTo($this->emission_date) && !is_null($this->number_invoice) && intval($row['numerofactura']) != $this->number_invoice ){
             $date_parsed = $date_parsed->addSeconds($this->second_increment);
             $this->second_increment += 1;
         } else {

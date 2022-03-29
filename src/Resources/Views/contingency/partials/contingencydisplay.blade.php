@@ -1,15 +1,15 @@
 <thead class="thead-light">
     <tr>
-        <th scope="col">{{ __('# ID Archivo') }}</th>
+        <th style="max-width: 10%" scope="col">{{ __('# ID Archivo') }}</th>
         {{-- @if(auth()->user()->hasRole('admin'))
             <th scope="col">{{ __('Restaurant') }}</th>
         @endif --}}
-        <th class="table-web" scope="col">{{ __('Fecha Creación') }}</th>
-        <th class="table-web" scope="col">{{ __('Nombre de Archivo') }}</th>
-        <th scope="col">{{ __('Estado') }}</th>
-        <th class="table-web" scope="col">{{ __('Fecha Procesado') }}</th>
-        <th class="table-web" scope="col">{{ __('Errores') }}</th>        
-        <th scope="col">{{ __('Actions') }}</th>
+        <th style="max-width: 10%" class="table-web" scope="col">{{ __('Fecha Creación') }}</th>
+        <th style="max-width: 20%" class="table-web" scope="col">{{ __('Nombre de Archivo') }}</th>
+        <th style="max-width: 10%" scope="col">{{ __('Estado') }}</th>
+        <th style="max-width: 10%" class="table-web" scope="col">{{ __('Fecha Procesado') }}</th>
+        <th style="max-width: 20%" class="table-web" scope="col">{{ __('Errores') }}</th>        
+        <th style="max-width: 15%" scope="col">{{ __('Actions') }}</th>
     </tr>
 </thead>
 <tbody>
@@ -43,9 +43,12 @@
         @include('posinvoicingfel::contingency.partials.laststatus')
     </td>
     <td class="table-web">
-        {{-- {{ $file->errors }} --}}
+        {{ is_null($file->processed_at) ? '' : date('d/m/Y h:i:s', strtotime($file->processed_at)) }}
     </td>
-    {{-- @include('posinvoicingfel::invoices.partials.actions.table',['invoice' => $invoice ]) --}}
+    <td>
+        <div>{{ isset($file->errors['error']) ? $file->errors['error'] : '' }}</div>
+    </td>
+    @include('posinvoicingfel::contingency.partials.actions.table',['file' => $file ])
 </tr>
 @endforeach
 </tbody>
