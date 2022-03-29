@@ -11,6 +11,7 @@ use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
 use EmizorIpx\PosInvoicingFel\Repository\FelTokenRepository;
 use EmizorIpx\PosInvoicingFel\Services\Invoices\FelInvoiceService;
 use EmizorIpx\PosInvoicingFel\Utils\ActionTypes;
+use EmizorIpx\PosInvoicingFel\Utils\StatusCodeInvoice;
 use Exception;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
@@ -209,6 +210,68 @@ class FelInvoiceController extends Controller
                 'status' => false,
                 'message'=> $ex->getMessage()
             ]);
+        }
+
+    }
+
+    public function validateState( Request $request, $invoice_id ){
+
+        try {
+
+            $invoice = $this->felinvoice_repo->getInvoice($invoice_id);
+    
+            if(is_null($invoice)){
+                throw new PosInvoicingException('No se encontro la factura');
+            }
+
+            if(is_null($invoice->cuf)){
+                throw new PosInvoicingException('La factura no fue emitida');
+            }
+
+            $credentials = $this->feltoken_repo->getCredentials($invoice->restorant_id);
+
+            if( empty($credentials) ){
+                throw new PosInvoicingException ("No se tiene credenciales configuradas para anular Facturas");
+            }
+
+            $invoice_service = new FelInvoiceService($credentials->host);
+
+            $invoice_service->setAccessToken($credentials->access_token);
+
+            $invoice_service->setCuf($invoice->cuf);
+
+            $response = $invoice_service->getInvoiceStatus();
+
+            if($response['status'] == 'error'){
+                \Log::debug("GET INVOICE STATUS JOBS >>>>>>>>>>>>>> Data Error " . $response['errors']);
+                throw new PosInvoicingException($response['errors']);
+            }
+
+            if( is_null ($response['data']['codigoEstado']) || !in_array($response['data']['codigoEstado'], StatusCodeInvoice::getFinalStatusArray('') ) ){
+                \Log::debug('GET INVOICE STATUS JOBS >>>>> La Factura aún esta Pendiente');
+
+                throw new PosInvoicingException('Factura Pendiente');
+            }
+
+            $this->felinvoice_repo->parseStatusResponse($response['data']);
+
+            $this->felinvoice_repo->update($invoice);
+
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Se Validó el Estado de la Factura',
+                'invoice'=>$invoice
+            ]);
+
+
+        } catch( PosInvoicingException | Exception $ex ){
+
+            return response()->json([
+                'status' => false,
+                'message'=> $ex->getMessage()
+            ]);
+
         }
 
     }

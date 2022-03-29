@@ -148,6 +148,14 @@ class FelInvoiceRepository {
 
     }
 
+    public function getInvoice($invoice_id){
+
+        $invoice = FelInvoice::where('id', $invoice_id)->first();
+
+        return $invoice;
+
+    }
+
     public function getFelInvoiceDetails(){
         return $this->data['detalles'];
     }

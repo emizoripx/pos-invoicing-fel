@@ -9,6 +9,8 @@ Route::group(['namespace' => "\EmizorIpx\PosInvoicingFel\Http\Controllers\Api", 
 
     Route::get("invoice/{order_id}", "FelInvoiceController@show")->name('posfel.show');
 
+    Route::get("invoice/state/{invoice_id}", "FelInvoiceController@validateState")->name('posfel.validatestate');
+
     Route::post('whatsapp-send/{invoice_id}', 'FelInvoiceWhatsappMessageController@send')->name('posfel.whatsapp.send');
 
     Route::get('{type_parametric}', 'ParametricController@get' )->name('posfel.parametrics'); // TYPE PARAMETRIC[revocation-reason - units - payments-methods - payments-methods]
