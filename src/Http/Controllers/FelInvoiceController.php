@@ -14,6 +14,7 @@ use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
 use EmizorIpx\PosInvoicingFel\Repository\FelTokenRepository;
 use EmizorIpx\PosInvoicingFel\Services\Invoices\FelInvoiceService;
 use EmizorIpx\PosInvoicingFel\Utils\ActionTypes;
+use EmizorIpx\PosInvoicingFel\Utils\StatusCodeInvoice;
 use Exception;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
@@ -71,6 +72,11 @@ class FelInvoiceController extends Controller
             $invoices = $invoices->whereDate('fechaEmision', '<=', $_GET['toDate']);
         }
 
+        // BY STATE
+        if (isset($_GET['state_invoice']) && strlen($_GET['state_invoice']) > 2) {
+            $invoices = $invoices->where('codigoEstado', '=', intval($_GET['state_invoice']));
+        }
+
         //FILTER BT status
         // if (isset($_GET['status_id'])) {
         //     $invoices = $invoices->whereHas('laststatus', function($q){
@@ -111,6 +117,7 @@ class FelInvoiceController extends Controller
         return view('posinvoicingfel::invoices.index', [
             'invoices' => $invoices,
             'restorants'=>$restorants,
+            'states'=> StatusCodeInvoice::INVOICE_STATES,
             // 'fields'=>[['class'=>'col-12', 'classselect'=>'noselecttwo', 'ftype'=>'select', 'name'=>'Driver', 'id'=>'driver', 'placeholder'=>'Assign Driver', 'data'=>$driversData, 'required'=>true]],
             'parameters'=>count($_GET) != 0,
         ]);

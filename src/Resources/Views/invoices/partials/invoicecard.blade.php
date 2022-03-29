@@ -42,6 +42,11 @@
                             </div>
                         </div>
 
+                        <!-- statuses -->
+                        <div class="col-md-3">
+                            @include('partials.select', ['name'=>"Estado",'id'=>"state_invoice",'placeholder'=>"Select status",'data'=> $states,'required'=>false, 'value'=>''])
+                        </div>
+
                        
                         
                         @hasrole('admin|driver')

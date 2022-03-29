@@ -8,6 +8,8 @@ class StatusCodeInvoice {
     const ARRAY_FINAL_STATUS_EMIT = [902,904,690];
     const ARRAY_FINAL_STATUS_REVOCATE = [691,906];
 
+    const INVOICE_STATES = ['690' => "VALIDA", "902" => "RECHAZADA", "691" => "ANULADA"];
+
 
 
     public static function getFinalStatusArray($action){

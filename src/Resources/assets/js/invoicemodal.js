@@ -3,6 +3,7 @@
 var receiptPOSInvoiceView=null;
 var anularInvoiceView=null;
 var enviarInvoiceView=null;
+var errorsInvoiceModals=null;
 
 var qrcode=null;
 
@@ -67,6 +68,12 @@ function validateStateInvoice(idInvoice){
 
 window.onload = function () {
 
+  errorsInvoiceModals = new Vue({
+    el: "#modalErrorsInvoice",
+    data: {
+      invoice: null
+    }
+  });
   
   receiptPOSInvoiceView=new Vue({
     el:"#modalPOSInvoiceView",
@@ -231,6 +238,18 @@ function verEnviarWhatsapp(invoice){
   enviarInvoiceView.client_phone_number = invoice.telefonoCliente;
   enviarInvoiceView.invoice_id = invoice.id;
   $('#modalWhatsappSend').modal('show');
+  
+}
+
+function showOrHideErrosModal( flag,invoice=null){
+  console.log('Enviar >>>> ', invoice, flag);
+  errorsInvoiceModals.invoice = invoice;
+  if(flag == true){
+    $('#modalErrorsInvoice').modal('show');
+  } else {
+    $('#modalErrorsInvoice').modal('hide');
+
+  }
   
 }
 

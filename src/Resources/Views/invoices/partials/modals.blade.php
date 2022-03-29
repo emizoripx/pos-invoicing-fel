@@ -211,5 +211,6 @@
 <!-- EMIZOR-INVOICE-INSERT -->
 <!-- Send Message Modal -->
 @include('posinvoicingfel::invoices.partials.whatsappmodal')
+@include('posinvoicingfel::invoices.partials.errorsmodal')
 <!-- End Message Modal -->
 <!-- EMIZOR-INVOICE-END -->
