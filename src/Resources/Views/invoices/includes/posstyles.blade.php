@@ -75,6 +75,44 @@
     word-break: break-all !important;
   }
 
+  @keyframes e-spinner-grow {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.e-spinner-grow {
+  display: inline-block;
+  width: .7rem;
+  height: .7rem;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  animation: 0.75s linear infinite spinner-grow;
+}
+
+#submitOrderPOS:focus{
+  outline: 1.5px outset white !important;
+  border-color: #c737a5;
+  box-shadow: 0 0 15px #cb0c9f;
+}
+#submitInvoicePOS:focus{
+  outline: 1.5px outset white !important;
+  border-color: 1px solid #c2a3bb !important;
+  box-shadow: 0 0 15px #cb0c9f;
+}
+
+.e-py-2 {
+  padding-top: 0.65rem !important;
+  padding-bottom: 0.65rem !important;
+}
+
   </style>
   <!--QR js -->
   <script src="{{ asset('vendor') }}/qr/qrcode.min.js"></script> 
