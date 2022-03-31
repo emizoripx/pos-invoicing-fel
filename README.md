@@ -1,4 +1,4 @@
-# POS INVOICING FEL PACKAGE v1.0.21
+# POS INVOICING FEL PACKAGE v1.0.22
 
 ## Library manage electronic invoices from a POS
 
@@ -32,4 +32,27 @@ for development in a local environment
 ```
 ```
     docker-compose exec app php artisan vendor:publish --tag=public --force
+```
+
+## Settings Restorants
+In the configurations column of the fel_restorants table we can aggregate the following configurations as a key value
+- Font size of the invoice print
+```json
+    {
+        "font_size": "10"
+    }
+```
+
+- Enable the option of invoices for the staff
+```json
+    {
+        "enable_invoices_staff": 1
+    }
+```
+
+- Remove black stripe from total
+```json
+    {
+        "without_background_total": 1
+    }
 ```
