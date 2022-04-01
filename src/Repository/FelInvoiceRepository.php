@@ -75,8 +75,11 @@ class FelInvoiceRepository {
 
         $array_detail = [];
 
+        $fel_restorant = isset(auth()->user()->restorant->fel_restorant) ? auth()->user()->restorant->fel_restorant : null;
+        $product_delivery_code = isset($fel_restorant) ? (isset($fel_restorant->settings['product_delivery_code']) ? $fel_restorant->settings['product_delivery_code'] : null) : null;
+
         $new = new stdClass();
-        $new->codigoProducto = getenv('PRODUCT_CODE_DELIVERY');
+        $new->codigoProducto = is_null($product_delivery_code) ? getenv('PRODUCT_CODE_DELIVERY') : $product_delivery_code;
         $new->codigoProductoSin =  $item->fel_product->codigoProductoSin;
         $new->codigoActividadEconomica =  $item->fel_product->codigoActividadEconomica;
         $new->descripcion = 'Delivery';
