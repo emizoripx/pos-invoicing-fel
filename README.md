@@ -56,3 +56,9 @@ In the configurations column of the fel_restorants table we can aggregate the fo
         "without_background_total": 1
     }
 ```
+- Added product code for delivery
+```json
+    {
+        "product_delivery_code": "DEL-2122331"
+    }
+```
