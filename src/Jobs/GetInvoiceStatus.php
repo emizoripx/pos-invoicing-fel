@@ -5,6 +5,7 @@ namespace EmizorIpx\PosInvoicingFel\Jobs;
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
+use EmizorIpx\PosInvoicingFel\Notifications\GetStatusInvoiceFailed;
 use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
 use EmizorIpx\PosInvoicingFel\Repository\FelTokenRepository;
 use EmizorIpx\PosInvoicingFel\Services\Invoices\FelInvoiceService;
@@ -17,6 +18,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+
+use Illuminate\Support\Facades\Notification;
 
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
@@ -165,5 +168,8 @@ class GetInvoiceStatus implements ShouldQueue
     {
         // Send user notification of failure, etc...
         \Log::debug("Ocurrio un Error en realizar la Peticion de Estado Excepción: " . $exception->getMessage());
+
+        Notification::route('mail', 'remberto.molina@ipxserver.com')->notify( new GetStatusInvoiceFailed($this->invoice, $exception->getFile() , $exception->getLine(), $exception->getMessage()) );
+
     }
 }
