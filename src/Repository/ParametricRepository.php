@@ -8,6 +8,7 @@ use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Services\Credentials\CredentialsService;
 use EmizorIpx\PosInvoicingFel\Services\Parametrics\ParametricsService;
 use EmizorIpx\PosInvoicingFel\Utils\Parametrics;
+use Carbon\Carbon;
 use stdClass;
 
 class ParametricRepository {
@@ -152,6 +153,8 @@ class ParametricRepository {
         $response = $parametric_service->get( $updated_at );
 
         $this->saveParametrics(Parametrics::SIN_PRODUCTS, $response, $restorant_id);
+
+        \DB::table('fel_restorants')->where('restorant_id', $restorant_id)->update([ 'last_products_sync' => Carbon::now()->toDateTimeString() ]);
 
 
     }

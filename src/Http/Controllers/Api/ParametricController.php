@@ -2,6 +2,7 @@
 
 namespace EmizorIpx\PosInvoicingFel\Http\Controllers\Api;
 
+use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Http\Resources\ParametricResource;
 use EmizorIpx\PosInvoicingFel\Repository\ParametricRepository;
 use Exception;
@@ -34,6 +35,27 @@ class ParametricController extends Controller
                 'data'=> ParametricResource::collection($parametrics)
             ]);
         } catch( Exception $ex ){
+            return response()->json([
+                'status' => false,
+                'message'=> $ex->getMessage()
+            ]);
+        }
+
+    }
+
+    public function syncProducts( $restorant_id ){
+
+        try {
+
+            $this->parametric_repo->syncSinProducts($restorant_id);
+
+            return response()->json([
+                'status' => true,
+                'message'=> "Productos sincronizados correctamente."
+            ]);
+
+        } catch(PosInvoicingException | Exception $ex){
+            \Log::debug("Error al Sincronizar Productos SIN " . $ex->getMessage() . " Linea : " . $ex->getLine());
             return response()->json([
                 'status' => false,
                 'message'=> $ex->getMessage()
