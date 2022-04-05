@@ -35,11 +35,15 @@ window.onload = function () {
         var formatter = new Intl.NumberFormat(locale, {
             style: 'currency',
             currency:  CASHIER_CURRENCY,
+            currencyDisplay: 'narrowSymbol'
         });
 
         var formated=formatter.format(price);
 
         return formated;
+      },
+      splitBs(number){
+        return number.replace('Bs', '');
       },
       date: function (date) {
         return moment(date).format('MMMM Do YYYY, h:mm:ss a');

@@ -1,4 +1,4 @@
-@if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('owner') || auth()->user()->hasRole('driver'))
+@if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('owner') || auth()->user()->hasRole('driver') || auth()->user()->hasRole('staff'))
 <?php
 $lastStatusAlisas=$order->status->pluck('alias')->last();
 ?>
