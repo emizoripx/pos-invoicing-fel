@@ -102,6 +102,7 @@ window.onload = function () {
         var formatter = new Intl.NumberFormat(locale, {
             style: 'currency',
             currency:  CASHIER_CURRENCY,
+            currencyDisplay: 'narrowSymbol'
         });
 
         var formated=formatter.format(price);
@@ -116,6 +117,9 @@ window.onload = function () {
       },
       formatDecimal(number){
         return number.replace(',', '.');
+      },
+      splitBs(number){
+        return number.replace('Bs', '');
       }
     },
   });

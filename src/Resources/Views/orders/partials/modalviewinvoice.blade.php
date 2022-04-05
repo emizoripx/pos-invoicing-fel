@@ -84,40 +84,38 @@
                             <thead>
                                 <tr>
                                     <th style="width:70% !important; " scope="col">{{__('Item') }}</th>
-                                    <th style="width:10% !important; padding-left: 9px; " scope="col">{{ __('Qty') }}</th>
+                                    <th style="width:10% !important; padding-left: 9px; padding-right: 16px; " scope="col">{{ __('Qty') }}</th>
                                     <th style="width:10% !important; padding-right: 15px; " scope="col">{{ __('P. Unitario') }}</th>
-                                    <th style="width:10% !important; " scope="col">{{ __('Subtotal') }}</th>
+                                    <th style="width:10% !important; padding-right: 2px;" scope="col">{{ __('Subtotal') }}</th>
                                 </tr>
                             </thead>
                             <tbody >
                                 <tr v-for="item in (invoice?invoice.detalles:[])">
                                     <td>@{{ item.descripcion }}</td>
                                     <td style="padding-left: 9px;">@{{ item.cantidad }}</td>
-                                    <td>@{{ item.precioUnitario.toFixed(2) }}</td>
-                                    <td style="padding-right: 5px;" class="text-right">@{{ formatDecimal(formatPrice(item.subTotal)) }}</td>
+                                    <td style="padding-right: 15px;" class="text-right">@{{ item.precioUnitario.toFixed(2) }}</td>
+                                    <td style="padding-right: 2px;" class="text-right">@{{ splitBs(formatDecimal(formatPrice(item.subTotal))) }}</td>
                                 </tr>
                                 <tr>
-                                  <th class="p-1 w-70" colspan="3">{{ __('Subtotal.') }}</th>
-                                  <td class="p-1 w-30 text-right">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2))):"" }}</td>
+                                  <th style="text-align:end;" class="p-1 w-70" colspan="2">{{ __('Subtotal ') }} Bs</th>
+                                  <th></th>
+                                  <td class="p-1 w-30 text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2)))):"" }}</td>
                                 </tr>
                                 
                                 <tr class="blockDelivery">
+                                    <th style="text-align:end;" colspan="2" class="p-1 w-70">{{ __('Discount') }} Bs</th>
                                     <th></th>
-                                    <th class="p-1 w-70">{{ __('Discount') }}</th>
-                                    <th></th>
-                                    <td class="p-1 w-30 text-right">@{{ invoice? (invoice.descuentoAdicional? formatDecimal(formatPrice((invoice.descuentoAdicional*1).toFixed(2))) : formatDecimal(formatPrice(0))):formatDecimal(formatPrice(0)) }}</td>
+                                    <td class="p-1 w-30 text-right">@{{ invoice? (invoice.descuentoAdicional? splitBs(formatDecimal(formatPrice((invoice.descuentoAdicional*1).toFixed(2)))) : splitBs(formatDecimal(formatPrice(0)))):splitBs(formatDecimal(formatPrice(0))) }}</td>
                                 </tr>
                                 <tr class="blockDelivery">
+                                    <th style="text-align:end;" colspan="2" class="p-1 w-70">{{ __('Total') }} Bs</th>
                                     <th></th>
-                                    <th class="p-1 w-70">{{ __('Total') }}</th>
-                                    <th></th>
-                                    <th class="p-1 w-30 text-right">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2))):"" }}</th>
+                                    <th class="p-1 w-30 text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2)))):"" }}</th>
                                 </tr>
                                 <tr v-if="invoice&&invoice.montoGiftCard&&invoice.montoGiftCard>0" class="blockDelivery">
+                                    <th style="text-align:end;" colspan="2" class="p-1 w-70">{{ __('Monto Gift Card') }} Bs</th>
                                     <th></th>
-                                    <th class="p-1 w-70">{{ __('Monto Gift Card') }}</th>
-                                    <th></th>
-                                    <th class="p-1 w-30 text-right">@{{ invoice?formatDecimal(formatPrice((invoice.montoGiftCard*1).toFixed(2))):"" }}</th>
+                                    <th class="p-1 w-30 text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoGiftCard*1).toFixed(2)))):"" }}</th>
                                 </tr>
                             </tbody>
                         </table>
@@ -125,7 +123,7 @@
                             <tbody>
                                 <tr>
                                     <th class="p-1 w-70">MONTO A PAGAR Bs</th>
-                                    <th class="p-1 w-30 text-right">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2))):"" }}</th>
+                                    <th class="p-1 w-30 text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2)))):"" }}</th>
                                 </tr>
                             </tbody>
                         </table>
@@ -133,8 +131,8 @@
                             <tbody>
                                 <tr>
                                     <th></th>
-                                    <th class="p-1 w-70">{{ __('Importe Base Crédito Fiscal.') }}</th>
-                                    <td class="p-1 w-30  text-right">@{{ invoice?formatDecimal(formatPrice((invoice.montoTotalSujetoIva*1).toFixed(2))):"" }}</td>
+                                    <th class="p-1 w-70">{{ __('Importe Base Crédito Fiscal Bs') }}</th>
+                                    <td class="p-1 w-30  text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotalSujetoIva*1).toFixed(2)))):"" }}</td>
                                 </tr>
                                 <tr>
                                     <th></th>
