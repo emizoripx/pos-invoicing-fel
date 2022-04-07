@@ -293,8 +293,8 @@ function imprimeFacturaPos(){
 function createQrInstance(){
   if(qrcode == null){
     qrcode= new QRCode("qrcode", {
-      width: 150,
-      height: 150,
+      width: 113,
+      height: 113,
       colorDark : "#000000",
       colorLight : "#ffffff",
       correctLevel : QRCode.CorrectLevel.M

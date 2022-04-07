@@ -3,7 +3,7 @@
     @isset($name)
         <label class="form-control-label">{{ __($name) }}</label><br />
     @endisset
-    <select class="form-control form-control-alternative my-select-e" @isset($data_dropdown_parent) data-dropdown-parent="#{{ $data_dropdown_parent }}" @endisset   name="{{ $id }}" id="{{ $id }}">
+    <select class="form-control form-control-alternative my-select-e" @isset($data_dropdown_parent) data-dropdown-parent="#{{ $data_dropdown_parent }}" @endisset   name="{{ $id }}" id="{{ $id }}" <?php if($required) {echo 'required';} ?>>
         <option disabled selected value> {{ __('Select')." ".__($placeholder)}} </option>
         @foreach ($data as $key => $item)
 
