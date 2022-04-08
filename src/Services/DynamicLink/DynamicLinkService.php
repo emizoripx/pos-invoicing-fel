@@ -59,7 +59,7 @@ class DynamicLinkService {
             $this->setHeaderData();
             $this->setData($url);
     
-            $response = $this->client->request('POST', "$this->path?ewqkey=$this->api_key", ["json" => $this->data, "headers" => $this->header_data, 'timeout' => 2]);
+            $response = $this->client->request('POST', "$this->path?key=$this->api_key", ["json" => $this->data, "headers" => $this->header_data, 'timeout' => 2]);
 
             $parsed_response = json_decode( (string) $response->getBody(), true);
             
