@@ -159,7 +159,7 @@
                             <p style="font-size: 8pt !important; font-weight: 500;" class="m-0 p-0 text-center">@{{ invoice? ((invoice.tipoEmision == 'En Linea')? "\"Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea\"": "\"Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido fuera de línea, verifique su envío con su proveedor o en la página web www.impuestos.gob.bo\""):"" }}</p>
                             <br />
                             {{-- <img :src=" 'https://api.qrserver.com/v1/create-qr-code/?ecc=M&size=150x150&data='+(invoice? encodeURIComponent(invoice.url_sin):'')" class="image mr-3" alt=""/> --}}
-                            <div class="row">
+                            <div style="page-break-inside: avoid;" class="row">
                                 <div class="w-50 px-3">
                                     <div style="margin: 10px; width:3cm; height:3cm;" id="qrcode"></div>
                                 </div>
@@ -169,6 +169,7 @@
                                 </div>
                             </div>
                             <div class="py-4">
+                                <p style="font-size: 12pt; font-weight: 600; padding:0px; margin-bottom: 0px !important;">@{{ invoice ? invoice.short_pdf_url : "" }}</p>
                                 <p style="font-size: 10pt; font-weight: 500;">Sistema de Facturación <span style="font-weight: 600">emizor.com</span></p>
                             </div>
                         </div>
