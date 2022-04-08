@@ -1,4 +1,4 @@
-# POS INVOICING FEL PACKAGE v1.0.25
+# POS INVOICING FEL PACKAGE v1.0.26
 
 ## Library manage electronic invoices from a POS
 
