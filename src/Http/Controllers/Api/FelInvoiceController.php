@@ -9,6 +9,7 @@ use EmizorIpx\PosInvoicingFel\Models\FelInvoice;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
 use EmizorIpx\PosInvoicingFel\Repository\FelTokenRepository;
+use EmizorIpx\PosInvoicingFel\Services\DynamicLink\DynamicLinkService;
 use EmizorIpx\PosInvoicingFel\Services\Invoices\FelInvoiceService;
 use EmizorIpx\PosInvoicingFel\Utils\ActionTypes;
 use EmizorIpx\PosInvoicingFel\Utils\StatusCodeInvoice;
@@ -22,10 +23,13 @@ class FelInvoiceController extends Controller
 
     protected $feltoken_repo;
 
-    public function __construct( FelInvoiceRepository $felinvoice_repo, FelTokenRepository $feltoken_repo )
+    protected $dynamic_link_service;
+
+    public function __construct( FelInvoiceRepository $felinvoice_repo, FelTokenRepository $feltoken_repo, DynamicLinkService $dynamic_link_service )
     {
         $this->felinvoice_repo = $felinvoice_repo;    
         $this->feltoken_repo = $feltoken_repo;
+        $this->dynamic_link_service = $dynamic_link_service;
     }
 
     public function emit( Request $request, $order_id ){
@@ -95,6 +99,12 @@ class FelInvoiceController extends Controller
 
                 SendWhatsappMessage::dispatch($fel_invoice)->delay(now()->addSeconds(2));
             }
+
+            $initDynamic = microtime(true);
+            $short_url = $this->dynamic_link_service->generateDynamicLink($fel_invoice->url_pdf);
+            $fel_invoice->short_pdf_url = $short_url;
+            $fel_invoice->save();
+            \Log::debug("TIME OF DYNAMIC LINK >>>>>>>>>>>>>>>>>> " . (microtime(true) - $initDynamic) );
 
             $fel_invoice->fechaEmision = $fel_invoice->formatted_fecha_emision;
 

@@ -102,6 +102,7 @@ window.onload = function () {
         var formatter = new Intl.NumberFormat(locale, {
             style: 'currency',
             currency:  CASHIER_CURRENCY,
+            currencyDisplay: 'narrowSymbol'
         });
 
         var formated=formatter.format(price);
@@ -116,6 +117,9 @@ window.onload = function () {
       },
       formatDecimal(number){
         return number.replace(',', '.');
+      },
+      splitBs(number){
+        return number.replace('Bs', '');
       }
     },
   });
@@ -132,7 +136,7 @@ window.onload = function () {
         $('#indicatorenviar').show();
         $('#botonenviar').hide();
         $('#botonclosemodal').hide();
-        axios.post(withSession(`/posfel/v1/whatsapp-send/${invoice_id}`), {phone_number: this.client_phone_number}).then(function (response) {
+        axios.post(`/posfel/v1/whatsapp-send/${invoice_id}`, {phone_number: this.client_phone_number}).then(function (response) {
        
           // $('#submitOrderPOS').show();
           $('#indicatorenviar').hide();
@@ -289,8 +293,8 @@ function imprimeFacturaPos(){
 function createQrInstance(){
   if(qrcode == null){
     qrcode= new QRCode("qrcode", {
-      width: 150,
-      height: 150,
+      width: 113,
+      height: 113,
       colorDark : "#000000",
       colorLight : "#ffffff",
       correctLevel : QRCode.CorrectLevel.M
