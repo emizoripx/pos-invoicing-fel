@@ -43,6 +43,31 @@
                 </div>
             </div>
         </div>
+        <hr class="my-4">
+        <div id="parametrics">
+            <h6 class="heading-small text-muted mb-4">Configuraciones</h6>
+            <div>
+                <?php
+                    $fel_restorant = $restorant->fel_restorant;
+                ?>
+                <form method="POST" action="{{ route('felrestorant.updatesettings', $fel_restorant->id) }}" >
+                    @csrf
+                    @method('put')
+                    <input type="hidden" name="restorant_id" value="{{ $restorant->id }}">
+                    <div class="row">
+                        @include('partials.fields',['fields'=>[
+                            ['class'=>'col-6', 'ftype'=>'input', 'type' => 'number', 'placeholder' => 'Tamaño de Fuente de la Factura (default 10pt)', 'name'=>"Tamaño de Fuente de la Factura",'id'=>"font_size",'required'=>false, 'value'=> isset($fel_restorant->settings['font_size']) ? $fel_restorant->settings['font_size'] :  null],
+                            ['class'=>'col-6', 'ftype'=>'input', 'placeholder' => 'Código de Producto Delivery', 'name'=>"Código de Producto Delivery",'id'=>"product_delivery_code",'required'=>false, 'value'=> isset($fel_restorant->settings['product_delivery_code']) ? $fel_restorant->settings['product_delivery_code'] :  null],
+                            ['name'=>'Habilitar Módulo de Facturas para Staff', 'additionalInfo'=>'Habilita en módulo de facturas para los cajeros.', 'id'=>'enable_invoices_staff', 'ftype'=>'bool', 'class' => 'col-12 ml-4', 'value'=> isset($fel_restorant->settings['enable_invoices_staff']) ? boolval($fel_restorant->settings['enable_invoices_staff']) : false ],
+                            ['name'=>'Deshabilitar Franja de Fondo en el Total de la Factura', 'additionalInfo'=>'Deshabilita la franja negra en el total de la impresión de la Factura', 'id'=>'without_background_total', 'ftype'=>'bool', 'class' => ' col-12 ml-4', 'value' => isset($fel_restorant->settings['without_background_total']) ? boolval($fel_restorant->settings['without_background_total']) : false ]
+                        ]])
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
     </div>
 </div>

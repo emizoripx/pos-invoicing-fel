@@ -16,4 +16,7 @@ Route::group(['namespace' => "\EmizorIpx\PosInvoicingFel\Http\Controllers", 'pre
     Route::get('products/export/{id_restorant}', 'FelProductoController@export')->name('products.export');
 
     Route::resource('integration', 'FelTokenController');
+
+    Route::put('settings/{restorant_id}', 'FelRestorantController@updateSettings')->name('felrestorant.updatesettings');
+
 });
