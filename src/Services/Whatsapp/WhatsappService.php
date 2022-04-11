@@ -76,7 +76,7 @@ class WhatsappService {
             $invoice_message = $this->invoice_message_repo->create([
                 'invoice_id' => $this->fel_invoice->id,
                 'restorant_id' => $this->fel_invoice->restorant_id,
-                'user_id' => 1,
+                'user_id' => auth()->user()->id,
                 'client_name' => $this->fel_invoice->nombreRazonSocial == "CONTROL TRIBUTARIO" ? "Sin Nombre" : $this->fel_invoice->nombreRazonSocial ,
             ]);
 

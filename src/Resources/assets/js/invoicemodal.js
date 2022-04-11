@@ -136,7 +136,7 @@ window.onload = function () {
         $('#indicatorenviar').show();
         $('#botonenviar').hide();
         $('#botonclosemodal').hide();
-        axios.post(withSession(`/posfel/v1/whatsapp-send/${invoice_id}`), {phone_number: this.client_phone_number}).then(function (response) {
+        axios.post(`/posfel/v1/whatsapp-send/${invoice_id}`, {phone_number: this.client_phone_number}).then(function (response) {
        
           // $('#submitOrderPOS').show();
           $('#indicatorenviar').hide();
