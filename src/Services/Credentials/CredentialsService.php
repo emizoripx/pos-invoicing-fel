@@ -5,6 +5,8 @@ namespace EmizorIpx\PosInvoicingFel\Services\Credentials;
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Services\BaseConnection;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 
 class CredentialsService extends BaseConnection {
 
@@ -64,11 +66,23 @@ class CredentialsService extends BaseConnection {
             
             return $this->parse_response($response);
 
+        } catch( ClientException $cex ){
+
+            $errors = json_decode($cex->getResponse()->getBody());
+            \Log::error(__($errors->error));
+
+            throw new PosInvoicingException( __($errors->error) );
+
+        } catch( ConnectException $rex ){
+
+            \Log::error($rex->getMessage());
+            throw new PosInvoicingException( "No se pudo etablecer conexión con el Host" );
+
         } catch (\Exception $ex) {
 
             \Log::error('Error en la autenticación, Verificar Credenciales ' . $ex->getMessage());
             
-            throw new PosInvoicingException("Error en la autenticación, Verificar Credenciales. ");
+            throw new PosInvoicingException($ex->getMessage());
 
         }
 

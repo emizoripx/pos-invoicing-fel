@@ -24,4 +24,8 @@ class FelRestorant extends Model
         return $this->hasMany( FelProduct::class, 'restorant_id', 'restorant_id' );
     }
 
+    public function fel_token(){
+        return $this->hasOne( FelToken::class, 'restorant_id', 'restorant_id');
+    }
+
 }
