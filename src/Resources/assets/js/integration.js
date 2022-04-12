@@ -51,4 +51,24 @@ var init_integration = function ( restorant_id ) {
         }
     });
 
+    // Control of Whatsapp Settings
+    $("#whatsapp_message_limit").attr("disabled", !$("#has_limit:checked").length);
+    $("#whatsapp_message_limit").attr("disabled", !$("#enabled_whatsapp_send:checked").length);
+    $("#enabled_whatsapp_auto_send").attr("disabled", !$("#enabled_whatsapp_send:checked").length);
+    $("#has_limit").attr("disabled", !$("#enabled_whatsapp_send:checked").length);
+
+    $(function() {
+        $("#has_limit").on('click', function() {
+            $("#whatsapp_message_limit").attr("disabled", !$("#has_limit:checked").length);
+        });
+
+        $("#enabled_whatsapp_send").on('click', function() {
+
+            $("#whatsapp_message_limit").attr("disabled", !$("#has_limit:checked").length || !$("#enabled_whatsapp_send:checked").length);
+            $("#enabled_whatsapp_auto_send").attr("disabled", !$("#enabled_whatsapp_send:checked").length);
+            $("#has_limit").attr("disabled", !$("#enabled_whatsapp_send:checked").length);
+        });
+    });
+    
+
 }

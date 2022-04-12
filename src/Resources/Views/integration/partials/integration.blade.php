@@ -44,7 +44,7 @@
             </div>
         </div>
         <hr class="my-4">
-        <div id="parametrics">
+        <div>
             <h6 class="heading-small text-muted mb-4">Configuraciones</h6>
             <div>
                 <?php
