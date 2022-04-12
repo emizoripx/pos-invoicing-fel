@@ -18,5 +18,7 @@ Route::group(['namespace' => "\EmizorIpx\PosInvoicingFel\Http\Controllers", 'pre
     Route::resource('integration', 'FelTokenController');
 
     Route::put('settings/{restorant_id}', 'FelRestorantController@updateSettings')->name('felrestorant.updatesettings');
+    
+    Route::put('settings-whatsapp/{restorant_id}', 'FelRestorantController@updateWhatsappSettings')->name('felrestorant.updatewhatsappsettings');
 
 });

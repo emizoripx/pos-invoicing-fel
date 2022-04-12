@@ -50,4 +50,33 @@ class FelRestorantController extends Controller {
     } 
 
 
+    public function updateWhatsappSettings ( Request $request, $restorant_id ){
+
+        try {
+
+            \Log::debug("Request Data >>>>> " . json_encode($request->all()));
+    
+            $data = [
+                'enabled_whatsapp_send' => $request->enabled_whatsapp_send == "true" ? true : false,
+                'enabled_whatsapp_auto_send' => $request->enabled_whatsapp_auto_send == "true" ? true : false,
+                'has_limit' => $request->has_limit == "true" ? true : false,
+                'whatsapp_message_limit' => isset($request->whatsapp_message_limit) ? intval($request->whatsapp_message_limit) : 0 ,
+            ];
+    
+            FelRestorant::where('id', $restorant_id)->update($data);
+    
+            return redirect()->route('admin.restaurants.edit', ['restaurant' => $request->restorant_id])->withStatus(__('Se actualizó correctamente las configuraciones de Whatsapp.'));
+
+        } catch ( Exception $ex ){
+
+            \Log::debug("Ocurrio un error al actulizar las configuraciones de Whatsapp " . $ex->getMessage());
+
+            return redirect()->route('admin.restaurants.edit', ['restaurant' => $request->restorant_id])->withError($ex->getMessage());
+
+        }
+
+
+    }
+
+
 }
