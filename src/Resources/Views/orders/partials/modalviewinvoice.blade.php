@@ -28,7 +28,7 @@
                             <p style="font-size: {{ $font_size }}pt !important; font-weight: 500;" class="m-0 p-0">@{{ invoice? invoice.direccion:"" }}</p>
                             <p style="font-size: {{ $font_size }}pt !important; font-weight: 500;" class="m-0 p-0">Teléfono: @{{ invoice? invoice.telefonoEmisor:"" }}</p>
                             <p style="font-size: {{ $font_size }}pt !important; font-weight: 500;" class="m-0 p-0">@{{ invoice? invoice.municipio:"" }}</p>
-                            <hr style="margin-top: 10px; margin-bottom: 10px;">
+                            <hr style="margin-top: 5px; margin-bottom: 5px;">
                             <p style="font-size: {{ $font_size }}pt !important; font-weight: 700;" class="m-0 p-0">FACTURA</p>
                             <p style="font-size: {{ $font_size }}pt !important; font-weight: 700;" class="mb-0 p-0">Con Derecho a Crédito Fiscal</p>
                             <div class="row">
@@ -50,7 +50,7 @@
                             
                             {{-- <p style="font-size: {{ $font_size }}pt !important; font-weight: 700;" class="m-0 p-0"><b>CÓD. AUTORIZACIÓN</b></p>
                             <p class="m-0 p-0" style="font-size: {{ $font_size }}pt !important; font-weight: 500; overflow-wrap: break-word;">@{{ invoice? invoice.cuf:"" }}</p> --}}
-                            <hr style="margin-top: 10px; margin-bottom: 10px;">
+                            <hr style="margin-top: 5px; margin-bottom: 5px;">
                             <div class="row" style="color: black;">
                                 <div class="col">
                                     <div class="row">
@@ -90,7 +90,7 @@
                                     
                                 </div>
                             </div>
-                            <hr style="margin-top: 10px; margin-bottom: 10px;">
+                            <hr style="margin-top: 5px; margin-bottom: 5px;">
                         </div>
                     </center>
                     <div class="w-100" style="background-color: white !important;">
@@ -110,20 +110,20 @@
                                     <td style="padding-right: 2px; vertical-align:bottom;" class="text-right">@{{ splitBs(formatDecimal(formatPrice(item.subTotal))) }}</td>
                                 </tr>
                                 <tr>
-                                  <th style="text-align:end;" class="p-1 w-70">{{ __('Subtotal ') }} Bs</th>
+                                  <th style="text-align:end;" class="px-1 w-70">{{ __('Subtotal ') }} Bs</th>
                                   <td class="w-30 text-right text-bottom">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2)))):"" }}</td>
                                 </tr>
                                 
                                 <tr class="blockDelivery">
-                                    <th style="text-align:end;" class="p-1 w-70">{{ __('Discount') }} Bs</th>
+                                    <th style="text-align:end;" class="px-1 w-70">{{ __('Discount') }} Bs</th>
                                     <td class="w-30 text-right">@{{ invoice? (invoice.descuentoAdicional? splitBs(formatDecimal(formatPrice((invoice.descuentoAdicional*1).toFixed(2)))) : splitBs(formatDecimal(formatPrice(0)))):splitBs(formatDecimal(formatPrice(0))) }}</td>
                                 </tr>
                                 <tr class="blockDelivery">
-                                    <th style="text-align:end;" class="p-1 w-70">{{ __('Total') }} Bs</th>
+                                    <th style="text-align:end;" class="px-1 w-70">{{ __('Total') }} Bs</th>
                                     <th class="w-30 text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2)))):"" }}</th>
                                 </tr>
                                 <tr v-if="invoice&&invoice.montoGiftCard&&invoice.montoGiftCard>0" class="blockDelivery">
-                                    <th style="text-align:end;" class="p-1 w-70">{{ __('Monto Gift Card') }} Bs</th>
+                                    <th style="text-align:end;" class="px-1 w-70">{{ __('Monto Gift Card') }} Bs</th>
                                     <th class="w-30 text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoGiftCard*1).toFixed(2)))):"" }}</th>
                                 </tr>
                             </tbody>
@@ -131,7 +131,7 @@
                         <table id="totalInModal" style="font-size: {{ $font_size }}pt !important; @if( $whitout_total_background == 1 )  color: black; @else background-color: #1f2227; color: #FFF;  @endif " class="mt-2 w-100">
                             <tbody>
                                 <tr>
-                                    <th class="p-1 w-70">MONTO A PAGAR Bs</th>
+                                    <th class="px-2 w-70">MONTO A PAGAR Bs</th>
                                     <th class="w-30 text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotal*1).toFixed(2)))):"" }}</th>
                                 </tr>
                             </tbody>
@@ -140,35 +140,35 @@
                             <tbody>
                                 <tr>
                                     <th></th>
-                                    <th class="p-1 w-70">{{ __('Importe Base Crédito Fiscal Bs') }}</th>
+                                    <th class="px-1 w-70">{{ __('Importe Base Crédito Fiscal Bs') }}</th>
                                     <td class="w-30  text-right">@{{ invoice?splitBs(formatDecimal(formatPrice((invoice.montoTotalSujetoIva*1).toFixed(2)))):"" }}</td>
                                 </tr>
                                 <tr>
                                     <th></th>
-                                    <td colspan="2">SON: @{{ invoice? (invoice.montoLiteral? invoice.montoLiteral : ""):"" }}</td>
+                                    <td class="px-1" colspan="2">SON: @{{ invoice? (invoice.montoLiteral? invoice.montoLiteral : ""):"" }}</td>
                                 </tr>
                             </tbody>
                         </table>
                         
-                        <hr style="margin-top: 10px; margin-bottom: 10px;">
+                        <hr style="margin-top: 5px; margin-bottom: 5px;">
                     </div>
                     <center style="background-color: white !important;">
                         <div style="color: black !important; background-color: white !important;">
                             <p style="font-size: 8pt !important; font-weight: 500;" class="m-0 p-0 text-center">ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO SERÁ SANCIONADO PENALMENTE DE ACUERDO A LEY</p>
                             <p style="font-size: 8pt !important; font-weight: 500;" class="m-0 py-2 text-center">@{{ invoice? invoice.leyenda:"" }}</p>
                             <p style="font-size: 8pt !important; font-weight: 500;" class="m-0 p-0 text-center">@{{ invoice? ((invoice.tipoEmision == 'En Linea')? "\"Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea\"": "\"Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido fuera de línea, verifique su envío con su proveedor o en la página web www.impuestos.gob.bo\""):"" }}</p>
-                            <br />
+                            
                             {{-- <img :src=" 'https://api.qrserver.com/v1/create-qr-code/?ecc=M&size=150x150&data='+(invoice? encodeURIComponent(invoice.url_sin):'')" class="image mr-3" alt=""/> --}}
-                            <div style="page-break-inside: avoid;" class="row">
+                            <div style="page-break-inside: avoid; padding-top: 5px;" class="row">
                                 <div class="w-50 px-3">
                                     <div style="margin: 10px; width:3cm; height:3cm;" id="qrcode"></div>
                                 </div>
-                                <div class="w-50 px-3 pt-3">
+                                <div class="w-50 pl-2 pr-3 pt-3">
                                     <p style="font-size: {{ $font_size }}pt !important; font-weight: 700;" class="m-0 p-0"><b>CÓD. AUTORIZACIÓN</b></p>
                                     <p class="m-0 p-0" style="font-size: {{ $font_size }}pt !important; font-weight: 500; overflow-wrap: break-word;">@{{ invoice? invoice.cuf:"" }}</p>
                                 </div>
                             </div>
-                            <div class="py-4">
+                            <div class="py-1">
                                 <p style="font-size: 12pt; font-weight: 600; padding:0px; margin-bottom: 0px !important;">@{{ invoice ? invoice.short_pdf_url : "" }}</p>
                                 <p style="font-size: 10pt; font-weight: 500;">Sistema de Facturación <span style="font-weight: 600">emizor.com</span></p>
                             </div>

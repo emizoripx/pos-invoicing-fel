@@ -142,6 +142,7 @@
             <h4>{{ __('You don`t have any invoices') }} ...</h4>
         @endif
     </div>
+    @include('posinvoicingfel::orders.partials.modalviewinvoice', ['modal_id' => 'modalPOSInvoiceView', 'pos_invoice' => 'posReciptInvoiceView'])
 </div>
 @section('js')
 <!--   Core JS Files   -->

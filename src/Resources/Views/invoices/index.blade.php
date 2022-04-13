@@ -1,7 +1,6 @@
 @extends('layouts.app', ['title' => __('Facturas')])
 
 @include('posinvoicingfel::invoices.includes.posstyles')
-@include('posinvoicingfel::orders.partials.modalviewinvoice', ['modal_id' => 'modalPOSInvoiceView', 'pos_invoice' => 'posReciptInvoiceView'])
 
 @section('admin_title')
     {{__('Facturas')}}
