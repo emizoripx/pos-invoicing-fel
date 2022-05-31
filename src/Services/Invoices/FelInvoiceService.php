@@ -202,7 +202,7 @@ class FelInvoiceService extends BaseConnection {
         } catch( ClientException $cex ){
 
             $errors = json_decode($cex->getResponse()->getBody())->errors;
-            \Log::error($errors);
+            \Log::error(json_encode($errors));
 
             throw new PosInvoicingException( json_encode($errors) );
 
