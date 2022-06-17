@@ -11,6 +11,7 @@ use EmizorIpx\PosInvoicingFel\Repository\FelInvoiceRepository;
 use EmizorIpx\PosInvoicingFel\Repository\FelTokenRepository;
 use EmizorIpx\PosInvoicingFel\Services\DynamicLink\DynamicLinkService;
 use EmizorIpx\PosInvoicingFel\Services\Invoices\FelInvoiceService;
+use EmizorIpx\PosInvoicingFel\Services\Nit\NitService;
 use EmizorIpx\PosInvoicingFel\Utils\ActionTypes;
 use EmizorIpx\PosInvoicingFel\Utils\StatusCodeInvoice;
 use Exception;
@@ -25,11 +26,14 @@ class FelInvoiceController extends Controller
 
     protected $dynamic_link_service;
 
-    public function __construct( FelInvoiceRepository $felinvoice_repo, FelTokenRepository $feltoken_repo, DynamicLinkService $dynamic_link_service )
+    protected $nit_service;
+
+    public function __construct( FelInvoiceRepository $felinvoice_repo, FelTokenRepository $feltoken_repo, DynamicLinkService $dynamic_link_service, NitService $nit_service )
     {
         $this->felinvoice_repo = $felinvoice_repo;    
         $this->feltoken_repo = $feltoken_repo;
         $this->dynamic_link_service = $dynamic_link_service;
+        $this->nit_service = $nit_service;
     }
 
     public function emit( Request $request, $order_id ){
@@ -282,6 +286,24 @@ class FelInvoiceController extends Controller
                 'message'=> $ex->getMessage()
             ]);
 
+        }
+
+    }
+
+    public function validateNIT( Request $request ) {
+
+        \Log::debug("Validate NIT ENTER ");
+        
+        $nit = $request->get('nit');
+        \Log::debug("Validate NIT Number: " . $nit);
+
+        try {
+
+            $response = $this->nit_service->validate($nit);
+    
+            return $response;
+        } catch( Exception $ex ) {
+            return [];
         }
 
     }

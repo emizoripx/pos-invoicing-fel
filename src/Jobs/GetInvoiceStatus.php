@@ -169,7 +169,7 @@ class GetInvoiceStatus implements ShouldQueue
         // Send user notification of failure, etc...
         \Log::debug("Ocurrio un Error en realizar la Peticion de Estado Excepción: " . $exception->getMessage());
 
-        Notification::route('mail', 'remberto.molina@ipxserver.com')->notify( new GetStatusInvoiceFailed($this->invoice, $exception->getFile() , $exception->getLine(), $exception->getMessage()) );
+        Notification::route('mail', 'remberto.molina@emizor.com')->notify( new GetStatusInvoiceFailed($this->invoice, $exception->getFile() , $exception->getLine(), $exception->getMessage()) );
 
     }
 }
