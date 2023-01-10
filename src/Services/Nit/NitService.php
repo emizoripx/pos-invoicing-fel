@@ -16,7 +16,8 @@ class NitService {
     public function __construct()
     {
         \Log::debug("Data Cliente >>>>>>>>>>> " . 'Bearer ');
-        $data_client['base_uri'] = 'http://pbdw.impuestos.gob.bo:8080';
+        $data_client['base_uri'] = 'https://pbdw.impuestos.gob.bo:8080';
+        $data_client['verify'] = false;
 
 
         $this->client = new Client($data_client);
