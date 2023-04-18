@@ -5,6 +5,7 @@ namespace EmizorIpx\PosInvoicingFel\Http\Controllers;
 use App\Restorant;
 use App\User;
 use EmizorIpx\PosInvoicingFel\Exceptions\PosInvoicingException;
+use EmizorIpx\PosInvoicingFel\Jobs\SyncBranches;
 use EmizorIpx\PosInvoicingFel\Models\FelToken;
 use EmizorIpx\PosInvoicingFel\Repository\FelTokenRepository;
 use EmizorIpx\PosInvoicingFel\Services\Credentials\CredentialsService;
@@ -60,6 +61,8 @@ class FelTokenController extends Controller
             \Log::debug("Response autenticación " . $response['expires_in']);
 
             $this->fel_token_repo->save($request->all(), $response);
+
+            SyncBranches::dispatchAfterResponse( $request->restorant_id );
 
             return redirect()->route('admin.restaurants.edit', ['restaurant' => $request->restorant_id])->withStatus(__('Se guardó correctamente los credenciales.'));
 
@@ -120,6 +123,8 @@ class FelTokenController extends Controller
                 $this->fel_token_repo->update($fel_token, $request->all(), $response);
 
             }
+
+            SyncBranches::dispatchAfterResponse( $request->restorant_id );
 
             return redirect()->route('admin.restaurants.edit', ['restaurant' => $request->restorant_id])->withStatus(__('Se actualizó correctamente los credenciales.'));
 
