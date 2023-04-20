@@ -22,4 +22,12 @@ class FelBranchRepository {
 
         return FelBranch::upsert($data, ['codigo_sucursal', 'restorant_id'], ['descripcion', 'zona']);
     }
+
+    public static function getPluck( $restorant_id ) {
+
+        $branches = \DB::table('fel_branches')->where('restorant_id', $restorant_id)->pluck('descripcion', 'id')->all();
+        
+        return $branches;
+        
+    }
 }
