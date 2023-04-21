@@ -57,4 +57,25 @@ class ParametricsService extends BaseConnection {
 
     }
 
+    public function getBranches() {
+
+        \Log::debug('/api/v1/sucursales');
+
+        try {
+
+            $response = $this->client->request('GET', '/api/v1/sucursales', ["headers" => ["Authorization" => "Bearer " . $this->access_token]]);
+
+            $this->setResponse( $this->parse_response( $response ) );
+
+            return $this->response;
+
+        } catch( Exception $ex ) {
+
+            \Log::debug('Error al Sincronizar: ' . $ex->getMessage());
+
+            throw new PosInvoicingException($ex->getMessage());
+
+        }
+    }
+
 }

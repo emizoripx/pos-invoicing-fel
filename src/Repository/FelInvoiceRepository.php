@@ -21,6 +21,7 @@ class FelInvoiceRepository {
             'codigoTipoDocumentoIdentidad' => isset($fel_data['codigoTipoDocumentoIdentidad']) ? $fel_data['codigoTipoDocumentoIdentidad'] : 1 ,
             'numeroDocumento' => $fel_data['numeroDocumento'],
             'codigoMetodoPago' => isset($fel_data['codigoMetodoPago']) ? $fel_data['codigoMetodoPago'] : 1,
+            'codigoSucursal' => isset($fel_data['codigoSucursal']) ? $fel_data['codigoSucursal'] : 0,
             'complemento' => isset($fel_data['complemento']) ? $fel_data['complemento'] : null,
             // 'complemento' => null,
             'usuario' => $order->employee_id,

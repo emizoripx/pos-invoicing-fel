@@ -49,6 +49,10 @@ class FelInvoiceService extends BaseConnection {
         $this->data  = $data;
     }
 
+    public function setBranchNumber( $value = null ) {
+        $this->branch_number = is_null($value) ? $this->data['codigoSucursal'] : $value;
+    }
+
     public function getResponse()
     {
         return $this->response;
@@ -182,6 +186,8 @@ class FelInvoiceService extends BaseConnection {
 
     public function sendToFel(){
 
+        $this->setBranchNumber();
+
         $this->checkPatameters();
 
         $this->validateData();
@@ -190,7 +196,7 @@ class FelInvoiceService extends BaseConnection {
 
         try{
 
-            \Log::debug("Send to : " . "/api/v1/sucursales/0/facturas/compra-venta" );
+            \Log::debug("Send to : " . "/api/v1/sucursales/$this->branch_number/facturas/compra-venta" );
             \Log::debug("data : " . json_encode($this->prepared_data));
 
             $response = $this->client->request('POST', "/api/v1/sucursales/$this->branch_number/facturas/$this->type_document", ["json" => $this->prepared_data, "headers" => ["Authorization" => "Bearer " . $this->access_token]]);

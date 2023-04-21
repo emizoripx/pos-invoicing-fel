@@ -50,7 +50,17 @@ class FelInvoiceController extends Controller
         //     $driversData[$driver->id] = $driver->name;
         // }
 
-        $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->whereNotNull('cuf')->orderBy('fechaEmision', 'desc');
+        $invoices = FelInvoice::where('restorant_id', auth()->user()->restorant->id)->whereNotNull('cuf')->when(auth()->user()->hasRole('staff'), function( $query ){
+
+            //EMIZOR-INVOICE-INSERT
+            $fel_branch = auth()->user()->fel_branch();
+
+            $user_ids = $fel_branch->users->pluck('id');
+
+            return $query->whereIn('usuario', $user_ids);
+            //EMIZOR-INVOICE-END
+
+        })->orderBy('fechaEmision', 'desc');
 
         //Get client's orders
         // if (auth()->user()->hasRole('owner')) {
