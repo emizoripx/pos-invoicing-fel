@@ -9,6 +9,7 @@ use EmizorIpx\PosInvoicingFel\Console\Commands\SyncSinProducts;
 use EmizorIpx\PosInvoicingFel\Console\Commands\TestSendMail;
 use EmizorIpx\PosInvoicingFel\Providers\PosInvoicingFelEventServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class PosInvoicingFelServiceProvider extends ServiceProvider
 {
@@ -54,6 +55,8 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
         ]);
 
         $this->mergeConfigFrom(__DIR__.'/Config/posinvoicingfel.php', 'posinvoicingfel');
+
+        Blade::componentNamespace('PosInvoicingFel\\Views\\Components', 'posinvoicingfel');
 
         // LOAD COMMANDS
 

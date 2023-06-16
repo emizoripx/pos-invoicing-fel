@@ -31,6 +31,9 @@ class FelRestorantController extends Controller {
                 $settings[ 
                     'without_background_total'] =  $request->without_background_total == 'true' ? 1 : 0;
             }
+            if( isset($request->template_invoice) && !empty( $request->template_invoice )){
+                $settings['template_invoice'] =   $request->template_invoice;
+            }
     
             \Log::debug("Array settings " . json_encode($settings));
     
