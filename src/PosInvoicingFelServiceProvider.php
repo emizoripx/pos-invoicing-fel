@@ -56,7 +56,7 @@ class PosInvoicingFelServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/Config/posinvoicingfel.php', 'posinvoicingfel');
 
-        Blade::componentNamespace('EmizorIpx\\PosInvoicingFel\\Resources\\Views\\Components', 'posinvoicingfel');
+        Blade::componentNamespace('EmizorIpx\PosInvoicingFel\Resources\Views\Components', 'posinvoicingfel');
 
         // LOAD COMMANDS
 
