@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <x-posinvoicingfel::templateinvoice :pos_invoice="$pos_invoice" />
+                <x-templateinvoice :pos_invoice="$pos_invoice" />
                 <div class="modal-footer">
                     <button data-bs-dismiss="modal" class="btn">{{ __('Close') }}</button>
                     <button @isset($is_order) onclick="imprimirFactura()" @else id="printPosInvoiceView" v-on:click="imprimirFactura" @endisset class="btn bg-primary">{{ __('Print') }}</button>
